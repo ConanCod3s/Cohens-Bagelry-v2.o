@@ -128,8 +128,8 @@ npm install -g vite
 Clone the repository:
 
 ```bash
-git clone https://github.com/Cohens-Bagelry.git
-cd Cohens-Bagelry
+git clone https://github.com/Cohens-Bagelry-v2.o.git
+cd Cohens-Bagelry-v2.o
 ```
 
 ### Install dependencies:
