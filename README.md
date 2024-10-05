@@ -35,46 +35,69 @@ The project is divided into two parts: the **frontend** (React) and the **backen
 ## Frontend
 
 ```plaintext
-/src
-  ├── components
-  │   ├── forms
-  │   │   ├── DateTime.tsx
-  │   │   ├── Email.tsx
-  │   │   ├── Password.tsx
-  │   │   ├── PhoneNumber.tsx
-  │   │   ├── Quantity.tsx
-  │   │   └── Submit.tsx
-  │   ├── login
-  │   │   ├── emailVerification
-  |   |   |   └── EmailVerification.tsx
-  │   │   ├── LoginWithEmailAndPassword.tsx
-  │   │   ├── LoginWithGoogle.tsx
-  │   │   └── LoginWithOnlyEmail.tsx
-  │   ├── signUp
-  |   |   └── SignUpWithEmail.tsx
-  │   ├── Footer.tsx
-  │   ├── Header.tsx
-  │   └── OrderTablePopover.tsx
-  ├── constants
-  │   ├── Constants.tsx
-  │   └── Types.tsx
-  ├── pages
-  │   ├── 404.tsx
-  │   ├── About.tsx
-  │   ├── Contact.tsx
-  │   ├── Home.tsx
-  │   └── OrderPage.tsx
-  ├── router
-  │   ├── GetPages.tsx
-  │   └── Router.tsx
-  ├── services
-  │   ├── firebase
-  │   │   ├── Calls.tsx
-  │   │   └── Config.tsx
-  │   └── providers
-  │       └── User.tsx
-  └── theme
-      └── Base.tsx
+  ├── /src
+  │  ├── components
+  │  │   ├── forms
+  │  │   │   ├── DateTime.tsx
+  │  │   │   ├── Email.tsx
+  │  │   │   ├── Password.tsx
+  │  │   │   ├── PhoneNumber.tsx
+  │  │   │   ├── Quantity.tsx
+  │  │   │   └── Submit.tsx
+  │  │   ├── login
+  │  │   │   ├── emailVerification
+  │  │   │   │   └── EmailVerification.tsx
+  │  │   │   ├── LoginWithEmailAndPassword.tsx
+  │  │   │   ├── LoginWithGoogle.tsx
+  │  │   │   └── LoginWithOnlyEmail.tsx
+  │  │   ├── signUp
+  │  │   │   └── SignUpWithEmail.tsx
+  │  │   ├── Footer.tsx
+  │  │   ├── Header.tsx
+  │  │   └── OrderTablePopover.tsx
+  │  ├── constants
+  │  │   ├── Constants.tsx
+  │  │   └── Types.tsx
+  │  ├── pages
+  │  │   ├── orderTabs
+  │  │   │   ├── bagels
+  │  │   │   │   └── Bagels.tsx
+  │  │   │   └── sourdough
+  │  │   │       └── Sourdough.tsx
+  │  │   ├── OrderPage.tsx
+  │  │   ├── profile
+  │  │   │   └── OrderHistory.tsx
+  │  │   ├── 404.tsx
+  │  │   ├── About.tsx
+  │  │   ├── Contact.tsx
+  │  │   ├── Home.tsx
+  │  │   └── OrderPage.tsx
+  │  ├── router
+  │  │   ├── GetPages.tsx
+  │  │   └── Router.tsx
+  │  ├── services
+  │  │   ├── firebase
+  │  │   │   ├── Calls.tsx
+  │  │   │   └── Config.tsx
+  │  │   └── providers
+  │  │       └── User.tsx
+  │  └── theme
+  │      └── Base.tsx
+  ├── .eslintrc.cjs
+  ├── .firebaserc
+  ├── .gitignore
+  ├── database.rules.json
+  ├── firebase.json
+  ├── firestore.indexes.json
+  ├── firestore.rules
+  ├── index.html
+  ├── package-lock.json
+  ├── package.json
+  ├── README.md
+  ├── storage.rules
+  ├── tsconfig.json
+  ├── tsconfig.node.json
+  └── vite.config.ts
 ```
 
 ## Backend
@@ -97,9 +120,9 @@ The project is divided into two parts: the **frontend** (React) and the **backen
   ├── .gitignore
   ├── package.json
   ├── tsconfig.json
-  └── README.md (this file)
-
+  └── README.md
 ```
+
 ## Misc/Unused
 
 ```plaintext
@@ -143,8 +166,9 @@ npm install
 cd ../functions
 npm install
 ```
-### Environment Variables
+### Environment Variables]
 
+ (Only required if changing secrets)
 - Set the Firebase environment variables:
 
 ```bash
