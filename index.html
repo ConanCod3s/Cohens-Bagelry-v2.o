@@ -8,17 +8,22 @@
   <script src="https://www.google.com/recaptcha/api.js?render=6LcXhx0qAAAAALl55axxthrjssNtH6N6hP4TzJh1" async
     defer></script>
 
-  <script src="https://www.google.com/recaptcha/enterprise.js?render=6LcXhx0qAAAAALl55axxthrjssNtH6N6hP4TzJh1"></script>
-
   <script>
-    grecaptcha.ready(function () {
-      grecaptcha.execute('6LcXhx0qAAAAALl55axxthrjssNtH6N6hP4TzJh1', { action: 'validate_captcha' })
-        .then(function (token) {
-          document.getElementById('g-recaptcha-response').value = token;
-        });
-    });
+    window.onload = function () {
+      grecaptcha.ready(function () {
+        grecaptcha.execute('6LcXhx0qAAAAALl55axxthrjssNtH6N6hP4TzJh1', { action: 'validate_captcha' })
+          .then(function (token) {
+            var recaptchaResponse = document.getElementById('g-recaptcha-response');
+            if (recaptchaResponse) {
+              recaptchaResponse.value = token;
+            } else {
+              console.warn('Element with id "g-recaptcha-response" not found.');
+            }
+          });
+      });
+    };
   </script>
-  <!-- End reCaptcha  -->
+  <!-- End reCAPTCHA -->
 
   <!-- Google Tag Manager -->
   <script async>
@@ -37,7 +42,6 @@
 
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-
   <title>Cohen's Bagelry</title>
 </head>
 
@@ -50,6 +54,8 @@
   <!-- End Google Tag Manager (noscript) -->
 
   <div id="root"></div>
+
+  <input type="hidden" id="g-recaptcha-response" name="g-recaptcha-response" />
 </body>
 
 </html>
