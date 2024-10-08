@@ -1,61 +1,46 @@
 <!DOCTYPE html>
 <html lang="en">
+  <head>
+    <script type="module" src="/src/Main.tsx" defer></script>
 
-<head>
-  <script type="module" src="/src/Main.tsx" defer></script>
+    <!-- Google Tag Manager -->
+    <script async>
+      (function (w, d, s, l, i) {
+        w[l] = w[l] || [];
+        w[l].push({ "gtm.start": new Date().getTime(), event: "gtm.js" });
+        var f = d.getElementsByTagName(s)[0],
+          j = d.createElement(s),
+          dl = l != "dataLayer" ? "&l=" + l : "";
+        j.async = true;
+        j.src = "https://www.googletagmanager.com/gtm.js?id=" + i + dl;
+        f.parentNode.insertBefore(j, f);
+      })(window, document, "script", "dataLayer", "GTM-K2J23LBV");
+    </script>
+    <!-- End Google Tag Manager -->
 
-  <!-- reCAPTCHA -->
-  <script src="https://www.google.com/recaptcha/api.js?render=6LcXhx0qAAAAALl55axxthrjssNtH6N6hP4TzJh1" async
-    defer></script>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Cohen's Bagelry</title>
+  </head>
 
-  <script>
-    window.onload = function () {
-      grecaptcha.ready(function () {
-        grecaptcha.execute('6LcXhx0qAAAAALl55axxthrjssNtH6N6hP4TzJh1', { action: 'validate_captcha' })
-          .then(function (token) {
-            var recaptchaResponse = document.getElementById('g-recaptcha-response');
-            if (recaptchaResponse) {
-              recaptchaResponse.value = token;
-            } else {
-              console.warn('Element with id "g-recaptcha-response" not found.');
-            }
-          });
-      });
-    };
-  </script>
-  <!-- End reCAPTCHA -->
+  <body>
+    <!-- Google Tag Manager (noscript) -->
+    <noscript>
+      <iframe
+        src="https://www.googletagmanager.com/ns.html?id=GTM-K2J23LBV"
+        height="0"
+        width="0"
+        style="display: none; visibility: hidden"
+      ></iframe>
+    </noscript>
+    <!-- End Google Tag Manager (noscript) -->
 
-  <!-- Google Tag Manager -->
-  <script async>
-    (function (w, d, s, l, i) {
-      w[l] = w[l] || [];
-      w[l].push({ "gtm.start": new Date().getTime(), event: "gtm.js" });
-      var f = d.getElementsByTagName(s)[0],
-        j = d.createElement(s),
-        dl = l != "dataLayer" ? "&l=" + l : "";
-      j.async = true;
-      j.src = "https://www.googletagmanager.com/gtm.js?id=" + i + dl;
-      f.parentNode.insertBefore(j, f);
-    })(window, document, "script", "dataLayer", "GTM-K2J23LBV");
-  </script>
-  <!-- End Google Tag Manager -->
+    <div id="root"></div>
 
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Cohen's Bagelry</title>
-</head>
-
-<body>
-  <!-- Google Tag Manager (noscript) -->
-  <noscript>
-    <iframe src="https://www.googletagmanager.com/ns.html?id=GTM-K2J23LBV" height="0" width="0"
-      style="display: none; visibility: hidden"></iframe>
-  </noscript>
-  <!-- End Google Tag Manager (noscript) -->
-
-  <div id="root"></div>
-
-  <input type="hidden" id="g-recaptcha-response" name="g-recaptcha-response" />
-</body>
-
+    <input
+      type="hidden"
+      id="g-recaptcha-response"
+      name="g-recaptcha-response"
+    />
+  </body>
 </html>
