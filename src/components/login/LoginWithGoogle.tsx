@@ -1,50 +1,41 @@
 import { IconButton } from '@mui/material';
-import { signInWithRedirect, signInWithPopup, setPersistence, browserSessionPersistence } from 'firebase/auth';
 import { useSnackbar } from 'notistack';
 import { useNavigate } from 'react-router-dom';
-import { auth, googleProvider } from '../../services/firebase/Calls';
-import GoogleIcon from '@mui/icons-material/Google';
-
-/**
- * 
- * I am having nothing but issues getting this to work with mobile devices
- * going to put it on the back burner for meow
- * 
- */
+import { useEffect } from 'react';
+import { GoogleOAuthProvider } from "@react-oauth/google";
+import { loginWithGoogleRedirect, handleFirebaseRedirectResult } from '../../services/firebase/AuthService';
 
 const GoogleLogin = () => {
     const { enqueueSnackbar } = useSnackbar();
     const navigate = useNavigate();
 
-    const handleGoogleLogin = () => {
-        if (isMobileOrPopupBlocked()) {
-            signInWithRedirect(auth, googleProvider);
-        } else {
-            setPersistence(auth, browserSessionPersistence)
-                .then(() => signInWithPopup(auth, googleProvider))
-                .then((result) => {
-                    const user = result.user;
-                    if (user) {
-                        enqueueSnackbar(`Welcome, ${user.displayName}!`, { variant: 'success' });
-                        navigate('/Order');
-                    }
-                })
-                .catch((error) => {
-                    console.error('Error during popup sign-in:', error);
-                    enqueueSnackbar(`Login failed: ${error.message}`, { variant: 'error' });
-                });
-        }
-    };
+    useEffect(() => {
+        handleFirebaseRedirectResult()
+            .then((result) => {
+                if (result?.user) {
+                    enqueueSnackbar(`Welcome, ${result.user.displayName}!`, { variant: 'success' });
+                    navigate('/Order');
+                }
+            })
+            .catch((error) => {
+                enqueueSnackbar(`Error during login: ${error.message}`, { variant: 'error' });
+            });
+    }, [enqueueSnackbar, navigate]);
 
-    const isMobileOrPopupBlocked = () => {
-        const userAgent = navigator.userAgent || navigator.vendor;
-        return /android|iPad|iPhone|iPod/i.test(userAgent) || !window.open;
+    const handleGoogleLogin = () => {
+        enqueueSnackbar("Redirecting for login...", { variant: 'info' });
+        loginWithGoogleRedirect()
+            .catch((error) => {
+                enqueueSnackbar(`Error setting persistence: ${error.message}`, { variant: 'error' });
+            });
     };
 
     return (
-        <IconButton color="primary" onClick={handleGoogleLogin}>
-            <GoogleIcon />
-        </IconButton>
+        <GoogleOAuthProvider clientId="your-client-id-here">
+            <IconButton onClick={handleGoogleLogin}>
+                <img src="path-to-google-icon.svg" alt="Google Login" style={{ width: '24px', height: '24px' }} />
+            </IconButton>
+        </GoogleOAuthProvider>
     );
 };
 

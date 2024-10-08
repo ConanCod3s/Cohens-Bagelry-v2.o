@@ -1,6 +1,6 @@
 import { createContext, useContext, useState, useEffect } from 'react';
 import { auth, getDocumentById } from '../firebase/Calls';
-import { onAuthStateChanged } from "firebase/auth";
+import { browserLocalPersistence, onAuthStateChanged, setPersistence } from "firebase/auth";
 import { UserInfoType, UserContextType, UserProviderType } from '../../utils/constants/Types';
 import { useSnackbar } from 'notistack';
 
@@ -13,6 +13,9 @@ export const UserProvider = ({ children }: UserProviderType) => {
 
     useEffect(() => {
         const unsubscribe = onAuthStateChanged(auth, async (user) => {
+            await setPersistence(auth, browserLocalPersistence);
+
+            console.log('Auth state changed:', user);
             if (user) {
                 try {
                     const userData = await getDocumentById({
@@ -21,6 +24,7 @@ export const UserProvider = ({ children }: UserProviderType) => {
                     });
                     setLogin(true);
                     setUserInfo(userData as UserInfoType);
+                    console.log('User data fetched:', userData);
                 } catch (error) {
                     console.error('Error fetching user data:', error);
                     enqueueSnackbar('Error fetching user data.', { variant: 'error' });
@@ -28,12 +32,13 @@ export const UserProvider = ({ children }: UserProviderType) => {
                     setUserInfo(null);
                 }
             } else {
+                console.log('User is logged out');
                 setLogin(false);
                 setUserInfo(null);
             }
         });
         return () => unsubscribe();
-    }, []);
+    }, [enqueueSnackbar]);
 
     return (
         <UserContext.Provider value={{ loggedIn, userInfo }}>

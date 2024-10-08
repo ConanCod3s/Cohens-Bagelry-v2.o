@@ -7,6 +7,9 @@ import Home from '../pages/Home';
 import { UserProvider } from '../services/providers/User';
 import { RouteConfig } from '../utils/constants/Types';
 import OrderHistory from '../pages/profile/OrderHistory';
+import { useEffect } from 'react';
+import { browserLocalPersistence, setPersistence } from 'firebase/auth';
+import { auth } from '../services/firebase/Calls';
 
 export const routes: RouteConfig[] = [
     {
