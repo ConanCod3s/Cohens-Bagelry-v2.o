@@ -5,7 +5,6 @@ import { initializeApp } from "firebase/app";
 // @ts-ignore
 // const analytics = getAnalytics(app);
 
-// Initialize Firebase
 export const app = initializeApp({
     apiKey: "AIzaSyAKGRGM4YLESAb5N9YKSmEBxYbIkjSJNrc",
     authDomain: "cohens-bagelry-8c701.firebaseapp.com",

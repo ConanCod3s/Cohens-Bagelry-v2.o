@@ -70,16 +70,14 @@ export default function Submit({
         if (user?.emailVerified) {
             setSubmitting(true);
             try {
-                // const token = await grecaptcha.execute("6LcXhx0qAAAAALl55axxthrjssNtH6N6hP4TzJh1", { action: "submit" });
-                // const token = await grecaptcha.enterprise.execute("6LcXhx0qAAAAALl55axxthrjssNtH6N6hP4TzJh1", { action: "submit" });
+                const token = (await getToken(appCheck, true)).token;
 
-                // Get the App Check token
-                const token = await getToken(appCheck, true); // true forces token refresh
                 if (!token) {
                     enqueueSnackbar('Failed to validate reCAPTCHA', { variant: 'error' });
                     setSubmitting(false);
                     return;
                 }
+
                 if (saveInfo) {
                     setUserProfile({
                         collectionName: 'customers',
@@ -130,8 +128,6 @@ export default function Submit({
                 enqueueSnackbar('Ordered', { variant: 'success' });
                 setSuccess(true);
             } catch (error) {
-                console.log('***********error', error)
-
                 enqueueSnackbar('Failed to place order', { variant: 'error' });
             } finally {
                 setSubmitting(false);
