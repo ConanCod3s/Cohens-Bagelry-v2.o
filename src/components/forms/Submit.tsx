@@ -5,6 +5,8 @@ import { emailVerification, getCount, setFireBaseDoc, setUserProfile } from '../
 import { auth } from '../../services/firebase/Calls';
 import { AvailableType } from '../../utils/constants/Types';
 import dayjs from 'dayjs';
+import { getToken } from 'firebase/app-check';
+import { appCheck } from '../../services/firebase/AppCheck';
 
 interface Props {
     setSuccess: (value: boolean) => void,
@@ -68,13 +70,14 @@ export default function Submit({
         if (user?.emailVerified) {
             setSubmitting(true);
             try {
-                const token = await grecaptcha.enterprise.execute("6LcXhx0qAAAAALl55axxthrjssNtH6N6hP4TzJh1", { action: "submit" });
+                const token = (await getToken(appCheck, true)).token;
 
                 if (!token) {
                     enqueueSnackbar('Failed to validate reCAPTCHA', { variant: 'error' });
                     setSubmitting(false);
                     return;
                 }
+
                 if (saveInfo) {
                     setUserProfile({
                         collectionName: 'customers',

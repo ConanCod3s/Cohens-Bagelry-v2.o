@@ -12,7 +12,7 @@ export default function App() {
             <Header />
             <Box sx={{ overflow: 'auto', padding: 1 }} id='ouletBox'>
                 <Outlet />
-                <div id="recaptcha-widget" style={{ display: 'none' }}></div>
+                {/* <div id="recaptcha-widget" style={{ display: 'none' }}></div> */}
             </Box>
         </ThemeProvider>
     );
