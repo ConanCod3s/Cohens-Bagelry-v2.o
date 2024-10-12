@@ -1,7 +1,6 @@
 // Import necessary Firebase services and functions
 import "firebase/auth";
 import { app } from "./Config";
-import { getFunctions, httpsCallable } from "firebase/functions";
 import { getDownloadURL, getStorage, ref } from "firebase/storage";
 import { GoogleAuthProvider, getAuth, sendEmailVerification, signOut } from "firebase/auth";
 import { getFirestore, collection, setDoc, doc, getDoc, getCountFromServer, getDocs } from "firebase/firestore";
@@ -10,14 +9,7 @@ import { getFirestore, collection, setDoc, doc, getDoc, getCountFromServer, getD
 const auth = getAuth(app);
 const db = getFirestore(app);
 const storage = getStorage(app);
-const functions = getFunctions();
 const googleProvider = new GoogleAuthProvider();
-
-// Define callable functions
-export const sendOrderEmail = httpsCallable(functions, "sendOrderEmail");
-export const makeRoleForUser = httpsCallable(functions, "makeRoleForUser");
-export const updateUserProfile = httpsCallable(functions, "updateUserProfile");
-export const createUserDocument = httpsCallable(functions, "createUserDocument");
 
 // Initialize global variables
 export const staff: any[] = [];
@@ -134,32 +126,6 @@ export const getCollection = async (collectionName: string) => {
         return [];
     }
 }
-
-// Your existing order placement function
-export const placeOrder = async (orderDetails: any) => {
-    try {
-        // Save order to Firestore
-        await setFireBaseDoc({
-            collectionName: "orders",
-            props: orderDetails
-        });
-
-        // Prepare email details
-        const emailData = {
-            subject: "Order Confirmation",
-            body: `Thank you for your order, ${orderDetails.firstName}!`,
-            recipient: orderDetails.email
-        };
-
-        // Call the sendOrderEmail function
-        await sendOrderEmail(emailData);
-
-        console.log("Order placed and email sent successfully.");
-    } catch (error) {
-        console.error("Error placing order or sending email:", error);
-    }
-};
-
 
 export const emailVerification = async () => {
     const user = auth.currentUser;

@@ -106,6 +106,7 @@ export default function Submit({
                 const count = await getCount('orders');
                 await setFireBaseDoc({
                     props: {
+                        orderStatus: 'Pending',
                         orderedByUid: uid,
                         firstName,
                         lastName,
@@ -125,6 +126,7 @@ export default function Submit({
                     },
                     collectionName: 'orders'
                 });
+
                 enqueueSnackbar('Ordered', { variant: 'success' });
                 setSuccess(true);
             } catch (error) {
