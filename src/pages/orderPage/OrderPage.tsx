@@ -36,7 +36,7 @@ export default function OrderPage() {
         setTotalCost(cost);
     }, [selections]);
 
-    const differenceToNextDollar = (Math.ceil(totalCost * 2) / 2) - totalCost;
+    const differenceToNextDollar = Math.ceil(totalCost) - totalCost;
 
     return (
         <Fragment>
