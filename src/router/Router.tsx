@@ -2,7 +2,7 @@ import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import App from '../App';
 import About from '../pages/About';
 import PageNotFound from '../pages/404';
-import OrderPage from '../pages/orderTabs/OrderPage';
+import OrderPage from '../pages/orderPage/OrderPage';
 import Home from '../pages/Home';
 import { UserProvider } from '../services/providers/User';
 import { RouteConfig } from '../utils/constants/Types';
