@@ -97,25 +97,31 @@ export default function OrderPage() {
                 <Grid container item xs={12} sm={12} md={4} lg={4} sx={{ display: 'grid', justifyContent: 'space-around' }}>
                     <Grid item>
                         {loggedIn ? (
-                            <PaymentWindow
-                                email={email}
-                                setEmail={setEmail}
-                                firstName={firstName}
-                                setFirstName={setFirstName}
-                                lastName={lastName}
-                                setLastName={setLastName}
-                                phoneNumber={phoneNumber}
-                                setPhoneNumber={setPhoneNumber}
-                                uid={userInfo?.uid ?? ''}
-                                selections={selections.filter((item) => item.quantity > 0)}
-                                totalCost={totalCost}
-                                day={day}
-                                setDay={setDay}
-                                time={time}
-                                setTime={setTime}
-                                success={success}
-                                setSuccess={setSuccess}
-                            />
+
+                            success ? (
+                                <Typography sx={{ textAlign: 'center', paddingTop: 2, paddingBottom: 10 }}>
+                                    Once your order has been placed, please allow 24 hours for me to contact you to confirm.
+                                </Typography>
+                            ) :
+                                <PaymentWindow
+                                    email={email}
+                                    setEmail={setEmail}
+                                    firstName={firstName}
+                                    setFirstName={setFirstName}
+                                    lastName={lastName}
+                                    setLastName={setLastName}
+                                    phoneNumber={phoneNumber}
+                                    setPhoneNumber={setPhoneNumber}
+                                    uid={userInfo?.uid ?? ''}
+                                    selections={selections.filter((item) => item.quantity > 0)}
+                                    totalCost={totalCost}
+                                    day={day}
+                                    setDay={setDay}
+                                    time={time}
+                                    setTime={setTime}
+                                    success={success}
+                                    setSuccess={setSuccess}
+                                />
                         ) : (
                             <LoginContainer />
                         )}
@@ -126,11 +132,6 @@ export default function OrderPage() {
                 </Grid>
             </Grid>
 
-            {success && (
-                <Typography sx={{ textAlign: 'center', paddingTop: 2, paddingBottom: 10 }}>
-                    Once your order has been placed, please allow 24 hours for me to contact you to confirm.
-                </Typography>
-            )}
         </Fragment>
     );
 }
