@@ -7,6 +7,7 @@ import { AvailableType } from '../../utils/constants/Types';
 import dayjs from 'dayjs';
 import { getToken } from 'firebase/app-check';
 import { appCheck } from '../../services/firebase/AppCheck';
+import { callVerifyRecaptcha } from '../../services/firebase/httpsCallables/VerifyRecaptcha';
 
 interface Props {
     setSuccess: (value: boolean) => void,
@@ -75,9 +76,15 @@ export default function Submit({
             setSubmitting(true);
             try {
                 const token = (await getToken(appCheck, true)).token;
-
                 if (!token) {
                     enqueueSnackbar('Failed to validate reCAPTCHA', { variant: 'error' });
+                    setSubmitting(false);
+                    return;
+                }
+
+                const responseSuccess = await callVerifyRecaptcha(token);
+                if (!responseSuccess) {
+                    enqueueSnackbar('reCAPTCHA validation failed', { variant: 'error' });
                     setSubmitting(false);
                     return;
                 }
@@ -93,7 +100,7 @@ export default function Submit({
                             lastName,
                             email,
                         }
-                    })
+                    });
                     setFireBaseDoc({
                         collectionName: 'customers',
                         docId: user.uid,
@@ -108,28 +115,27 @@ export default function Submit({
                 }
 
                 const count = await getCount('orders');
-                console.log('******costData', costData)
-                // await setFireBaseDoc({
-                //     props: {
-                //         orderedByUid: uid,
-                //         firstName,
-                //         lastName,
-                //         phoneNumber,
-                //         orderId: `WO-${(count + 1).toString().padStart(4, '0')}`,
-                //         day: dayjs(day).format('YYYY-MM-DD'),
-                //         time: dayjs(time).format('HH:mm:ss'),
-                //         email,
-                //         costData,
-                //         totalQuantity,
-                //         selections: selections.map(obj => ({
-                //             quantity: obj.quantity,
-                //             value: obj.value,
-                //             cost: obj.cost,
-                //         })),
-                //         token
-                //     },
-                //     collectionName: 'orders'
-                // });
+                await setFireBaseDoc({
+                    props: {
+                        orderedByUid: uid,
+                        firstName,
+                        lastName,
+                        phoneNumber,
+                        orderId: `WO-${(count + 1).toString().padStart(4, '0')}`,
+                        day: dayjs(day).format('YYYY-MM-DD'),
+                        time: dayjs(time).format('HH:mm:ss'),
+                        email,
+                        costData,
+                        totalQuantity,
+                        selections: selections.map(obj => ({
+                            quantity: obj.quantity,
+                            value: obj.value,
+                            cost: obj.cost,
+                        })),
+                    },
+                    collectionName: 'orders'
+                });
+
                 enqueueSnackbar('Ordered', { variant: 'success' });
                 setSuccess(true);
             } catch (error) {
@@ -141,7 +147,7 @@ export default function Submit({
             enqueueSnackbar('Please verify your email before placing an order.', { variant: 'warning' });
             await emailVerification().then(() => (
                 enqueueSnackbar('Verification email has been sent!', { variant: 'success' })
-            ))
+            ));
         }
     };
 
