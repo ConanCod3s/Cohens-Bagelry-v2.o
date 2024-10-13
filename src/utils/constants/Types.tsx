@@ -28,7 +28,11 @@ type UserProviderType = {
 type OrderType = {
     orderStatus: 'Pending' | 'Confirmed' | 'Declined';
     totalQuantity: number;
-    totalCost: number;
+    costData: {
+        cost: number,
+        fee: number,
+        totalCost: number,
+    };
     orderId: string;
     firstName: string;
     lastName: string;

@@ -59,30 +59,42 @@ The project is divided into two parts: the **frontend** (React) and the **backen
   │  │   ├── Constants.tsx
   │  │   └── Types.tsx
   │  ├── pages
-  │  │   ├── orderTabs
-  │  │   │   ├── bagels
-  │  │   │   │   └── Bagels.tsx
-  │  │   │   └── sourdough
-  │  │   │       └── Sourdough.tsx
-  │  │   ├── OrderPage.tsx
+  │  │   ├── orderPage
+  │  │   │   ├── paymentWindow
+  │  │   │   │   ├── PaymentWindow.tsx
+  │  │   │   ├── typeTabs
+  │  │   │   │   ├── bagels
+  │  │   │   │   │   └── Bagels.tsx
+  │  │   │   │   └── sourdough
+  │  │   │   │       └── Sourdough.tsx
+  │  │   │   ├── Information.tsx
+  │  │   │   └── OrderPage.tsx
   │  │   ├── profile
   │  │   │   └── OrderHistory.tsx
   │  │   ├── 404.tsx
   │  │   ├── About.tsx
   │  │   ├── Contact.tsx
   │  │   ├── Home.tsx
-  │  │   └── OrderPage.tsx
   │  ├── router
   │  │   ├── GetPages.tsx
   │  │   └── Router.tsx
   │  ├── services
   │  │   ├── firebase
+  │  │   │   ├── httpsCallables
+  │  │   │   │   └── VerifyRecaptcha.tsx
+  │  │   │   ├── AppCheck.tsx
   │  │   │   ├── Calls.tsx
-  │  │   │   └── Config.tsx
+  │  │   │   ├── Config.tsx
+  │  │   │   └── OneTokenChanged.tsx
   │  │   └── providers
   │  │       └── User.tsx
-  │  └── theme
-  │      └── Base.tsx
+  │  ├── theme
+  │  │   └── Base.tsx
+  │  ├── utils
+  │  │   ├── constants
+  │  │   │   ├── Constants.tsx
+  │  │   │   └── Types.tsx
+  │  │   └── CamelCase.tsx
   ├── .eslintrc.cjs
   ├── .firebaserc
   ├── .gitignore
