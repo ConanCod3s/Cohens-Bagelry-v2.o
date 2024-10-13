@@ -27,7 +27,11 @@ type UserProviderType = {
 
 type OrderType = {
     totalQuantity: number;
-    totalCost: number;
+    costData: {
+        cost: number,
+        fee: number,
+        totalCost: number,
+    };
     orderId: string;
     firstName: string;
     lastName: string;

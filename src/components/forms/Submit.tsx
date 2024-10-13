@@ -21,7 +21,11 @@ interface Props {
     email: string;
     phoneNumber: string;
     selections: AvailableType[];
-    totalCost: number;
+    costData: {
+        cost: number,
+        fee: number,
+        totalCost: number,
+    };
 }
 
 export default function Submit({
@@ -36,7 +40,7 @@ export default function Submit({
     email,
     phoneNumber,
     selections,
-    totalCost
+    costData
 }: Props) {
     const { enqueueSnackbar } = useSnackbar();
     const [submitting, setSubmitting] = useState<boolean>(false);
@@ -121,7 +125,7 @@ export default function Submit({
                         day: dayjs(day).format('YYYY-MM-DD'),
                         time: dayjs(time).format('HH:mm:ss'),
                         email,
-                        totalCost,
+                        costData,
                         totalQuantity,
                         selections: selections.map(obj => ({
                             quantity: obj.quantity,

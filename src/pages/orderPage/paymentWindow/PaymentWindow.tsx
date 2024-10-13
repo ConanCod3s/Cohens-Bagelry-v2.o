@@ -17,7 +17,11 @@ interface PaymentWindowProps {
     setPhoneNumber: (value: string) => void;
     uid: string;
     selections: AvailableType[];
-    totalCost: number;
+    costData: {
+        cost: number,
+        fee: number,
+        totalCost: number,
+    };
     day: dayjs.Dayjs;
     setDay: (value: dayjs.Dayjs) => void;
     time: dayjs.Dayjs;
@@ -37,7 +41,7 @@ export default function PaymentWindow({
     setPhoneNumber,
     uid,
     selections,
-    totalCost,
+    costData,
     day,
     setDay,
     time,
@@ -75,7 +79,7 @@ export default function PaymentWindow({
                 phoneNumber={phoneNumber}
                 firstName={firstName}
                 lastName={lastName}
-                totalCost={totalCost}
+                costData={costData}
             />
         </Stack>
     );
