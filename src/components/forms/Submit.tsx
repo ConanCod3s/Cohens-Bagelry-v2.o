@@ -20,7 +20,11 @@ interface Props {
     email: string;
     phoneNumber: string;
     selections: AvailableType[];
-    totalCost: number;
+    costData: {
+        cost: number,
+        fee: number,
+        totalCost: number,
+    };
 }
 
 export default function Submit({
@@ -35,7 +39,7 @@ export default function Submit({
     email,
     phoneNumber,
     selections,
-    totalCost
+    costData
 }: Props) {
     const { enqueueSnackbar } = useSnackbar();
     const [submitting, setSubmitting] = useState<boolean>(false);
@@ -104,27 +108,28 @@ export default function Submit({
                 }
 
                 const count = await getCount('orders');
-                await setFireBaseDoc({
-                    props: {
-                        orderedByUid: uid,
-                        firstName,
-                        lastName,
-                        phoneNumber,
-                        orderId: `WO-${(count + 1).toString().padStart(4, '0')}`,
-                        day: dayjs(day).format('YYYY-MM-DD'),
-                        time: dayjs(time).format('HH:mm:ss'),
-                        email,
-                        totalCost,
-                        totalQuantity,
-                        selections: selections.map(obj => ({
-                            quantity: obj.quantity,
-                            value: obj.value,
-                            cost: obj.cost,
-                        })),
-                        token
-                    },
-                    collectionName: 'orders'
-                });
+                console.log('******costData', costData)
+                // await setFireBaseDoc({
+                //     props: {
+                //         orderedByUid: uid,
+                //         firstName,
+                //         lastName,
+                //         phoneNumber,
+                //         orderId: `WO-${(count + 1).toString().padStart(4, '0')}`,
+                //         day: dayjs(day).format('YYYY-MM-DD'),
+                //         time: dayjs(time).format('HH:mm:ss'),
+                //         email,
+                //         costData,
+                //         totalQuantity,
+                //         selections: selections.map(obj => ({
+                //             quantity: obj.quantity,
+                //             value: obj.value,
+                //             cost: obj.cost,
+                //         })),
+                //         token
+                //     },
+                //     collectionName: 'orders'
+                // });
                 enqueueSnackbar('Ordered', { variant: 'success' });
                 setSuccess(true);
             } catch (error) {
