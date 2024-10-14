@@ -91,20 +91,25 @@ export default function OrderHistory() {
         const fetchData = async () => {
             if (loggedIn && userInfo) {
                 try {
-                    const [ordersData, adminStatus] = await Promise.all([
-                        getCollection('orders'),
-                        callCheckIfAdmin(userInfo?.uid),
-                    ]);
+                    setLoading(true);
 
+                    const adminStatus = await callCheckIfAdmin(userInfo.uid);
+                    setIsAdmin(adminStatus as boolean);
+
+                    let ordersData = await getCollection('orders');
                     const validOrders = ordersData.filter(isValidOrder);
-                    const sortedOrders = validOrders.sort((a, b) => {
+
+                    const filteredOrders = adminStatus
+                        ? validOrders
+                        : validOrders.filter(order => order.orderedByUid === userInfo.uid);
+
+                    const sortedOrders = filteredOrders.sort((a, b) => {
                         const orderIdA = a.orderId.substring(3);
                         const orderIdB = b.orderId.substring(3);
                         return orderIdA.localeCompare(orderIdB);
                     });
 
                     setOrders(sortedOrders);
-                    setIsAdmin(adminStatus as boolean);
                 } catch (error) {
                     console.error('Failed to fetch data:', error);
                 } finally {
@@ -141,4 +146,4 @@ export default function OrderHistory() {
             </Grid>
         </Box>
     );
-}
+};

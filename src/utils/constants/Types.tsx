@@ -30,6 +30,7 @@ type AvailableType = {
 }
 
 type OrderType = {
+    orderedByUid: string;
     orderStatus: 'Pending' | 'Confirmed' | 'Declined';
     totalQuantity: number;
     costData: {

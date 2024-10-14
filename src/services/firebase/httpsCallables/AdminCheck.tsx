@@ -4,12 +4,11 @@ import { getFunctions } from 'firebase/functions';
 const functions = getFunctions();
 const checkIfAdmin = httpsCallable(functions, 'checkIfAdmin');
 
-export const callCheckIfAdmin = async (userInfo: any) => {
+export const callCheckIfAdmin = async (uid: any) => {
     try {
-        const response = await checkIfAdmin(userInfo);
+        const response = await checkIfAdmin(uid);
         return response.data
     } catch (error) {
-        console.error('Error calling checkIfAdmin:', error);
         return false;
     }
 };
