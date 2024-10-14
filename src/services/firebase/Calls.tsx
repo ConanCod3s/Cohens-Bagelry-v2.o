@@ -1,9 +1,8 @@
-// Import necessary Firebase services and functions
 import "firebase/auth";
 import { app } from "./Config";
 import { getDownloadURL, getStorage, ref } from "firebase/storage";
 import { getAuth, sendEmailVerification, signOut } from "firebase/auth";
-import { getFirestore, collection, setDoc, doc, getDoc, getCountFromServer, getDocs } from "firebase/firestore";
+import { getFirestore, collection, setDoc, doc, getDoc, getCountFromServer, getDocs, query, where } from "firebase/firestore";
 
 // Initialize Firebase services
 const auth = getAuth(app);
@@ -63,6 +62,33 @@ export const setUserProfile = async ({
     }
 };
 
+// Function to get the document ID by a specific field and value
+export const getDocIdByField = async ({
+    collectionName,
+    fieldName,
+    value,
+}: {
+    collectionName: string;
+    fieldName: string;
+    value: any;
+}): Promise<string | null> => {
+    try {
+        const collectionRef = collection(db, collectionName);
+        const q = query(collectionRef, where(fieldName, "==", value));
+        const querySnapshot = await getDocs(q);
+
+        if (!querySnapshot.empty) {
+            return querySnapshot.docs[0].id;
+        } else {
+            console.error(`No document found with ${fieldName} equal to ${value} in collection ${collectionName}`);
+            return null;
+        }
+    } catch (error) {
+        console.error(`Error fetching document by ${fieldName}:`, error);
+        return null;
+    }
+};
+
 // Set a document in Firestore
 export const setFireBaseDoc = async ({
     collectionName,
@@ -77,15 +103,15 @@ export const setFireBaseDoc = async ({
         if (!docId) {
             const newRef = doc(collection(db, collectionName));
             const data = collectionName === "customers" ? { uid: newRef.id, ...props } : props;
-            await setDoc(newRef, data);
+            await setDoc(newRef, data, { merge: true });
         } else {
-            await setDoc(doc(db, collectionName, docId), props);
+            await setDoc(doc(db, collectionName, docId), props, { merge: true });
         }
-        console.log(`Document set successfully in ${collectionName} collection`);
     } catch (error) {
         console.error(`Error setting document in ${collectionName} collection:`, error);
     }
 };
+
 
 // Get a document from Firestore by its ID
 export const getDocumentById = async ({
