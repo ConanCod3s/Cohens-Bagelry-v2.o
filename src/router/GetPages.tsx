@@ -1,17 +1,19 @@
 import { routes } from './Router';
 import { RouteConfig } from '../utils/constants/Types';
 
-export default function getPages() {
-    const pages: { path: string, showOnlyOnMenu: boolean }[] = [];
+type PageInfo = {
+    path: string;
+    showOnlyOnMenu: boolean;
+};
 
-    const extractPaths = (importedRoute: RouteConfig[]) => {
-        importedRoute.forEach((route: RouteConfig) => {
-            if (route.path) pages.push({ path: route.path, showOnlyOnMenu: route.showOnlyOnMenu });
-            if (route.children) extractPaths(route.children);
+export default function getPages(): PageInfo[] {
+    const extractPaths = (importedRoute: RouteConfig[]): PageInfo[] => {
+        return importedRoute.flatMap((route) => {
+            const currentPage = route.path ? [{ path: route.path, showOnlyOnMenu: route.showOnlyOnMenu }] : [];
+            const childrenPages = route.children ? extractPaths(route.children) : [];
+            return [...currentPage, ...childrenPages];
         });
     };
 
-    extractPaths(routes);
-
-    return pages;
+    return extractPaths(routes);
 };

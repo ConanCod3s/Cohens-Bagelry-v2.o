@@ -1,13 +1,6 @@
 import { ReactNode } from "react";
 
-type RouteConfig = {
-    path: string;
-    element: JSX.Element;
-    showOnlyOnMenu: boolean;
-    children?: RouteConfig[];
-    errorElement?: JSX.Element;
-}
-
+// User-related types
 type UserInfoType = {
     uid: string;
     firstName?: string;
@@ -25,23 +18,7 @@ type UserProviderType = {
     children: ReactNode;
 }
 
-type OrderType = {
-    orderStatus: 'Pending' | 'Confirmed' | 'Declined';
-    totalQuantity: number;
-    costData: {
-        cost: number,
-        fee: number,
-        totalCost: number,
-    };
-    orderId: string;
-    firstName: string;
-    lastName: string;
-    phoneNumber: string;
-    day: string;
-    time: string;
-    selections: AvailableType[];
-}
-
+// Order-related types
 type AvailableType = {
     maxQuantity: number;
     type: string;
@@ -52,4 +29,37 @@ type AvailableType = {
     weight: number;
 }
 
-export type { AvailableType, RouteConfig, UserInfoType, UserContextType, UserProviderType, OrderType };
+type OrderType = {
+    orderStatus: 'Pending' | 'Confirmed' | 'Declined';
+    totalQuantity: number;
+    costData: {
+        cost: number;
+        fee: number;
+        totalCost: number;
+    };
+    orderId: string;
+    firstName: string;
+    lastName: string;
+    phoneNumber: string;
+    day: string;
+    time: string;
+    selections: AvailableType[];
+}
+
+// Routing-related types
+type RouteConfig = {
+    path: string;
+    element: JSX.Element;
+    showOnlyOnMenu: boolean;
+    children?: RouteConfig[];
+    errorElement?: JSX.Element;
+}
+
+export type {
+    AvailableType,
+    RouteConfig,
+    UserInfoType,
+    UserContextType,
+    UserProviderType,
+    OrderType
+};

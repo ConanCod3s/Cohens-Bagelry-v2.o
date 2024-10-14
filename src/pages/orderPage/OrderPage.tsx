@@ -26,6 +26,7 @@ export default function OrderPage() {
         totalCost: 0,
     });
     const [selections, setSelections] = useState<AvailableType[]>([...bagels, ...sourdough]);
+
     const [email, setEmail] = useState<string>(userInfo?.email ?? '');
     const [lastName, setLastName] = useState<string>(userInfo?.lastName ?? '');
     const [firstName, setFirstName] = useState<string>(userInfo?.firstName ?? '');

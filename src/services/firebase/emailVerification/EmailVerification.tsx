@@ -1,5 +1,5 @@
 import { createUserWithEmailAndPassword, sendEmailVerification } from "firebase/auth";
-import { auth } from '../../../services/firebase/Calls';
+import { auth } from '../Calls';
 import { enqueueSnackbar } from 'notistack';
 
 export default function handleSignUp(email: string, password: string) {

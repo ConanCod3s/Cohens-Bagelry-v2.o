@@ -7,7 +7,8 @@ import IconButton from '@mui/material/IconButton';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 
-const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
+type SettingOption = 'Profile' | 'Account' | 'Dashboard' | 'Logout';
+const settings: SettingOption[] = ['Profile', 'Account', 'Dashboard', 'Logout'];
 
 export default function SettingsMenu() {
     const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
@@ -18,6 +19,27 @@ export default function SettingsMenu() {
 
     const handleCloseUserMenu = () => {
         setAnchorElUser(null);
+    };
+
+    // Add navigation or logic here
+    const handleSettingAction = (setting: SettingOption) => {
+        switch (setting) {
+            case 'Profile':
+                console.log('Navigating to Profile');
+                break;
+            case 'Account':
+                console.log('Navigating to Account');
+                break;
+            case 'Dashboard':
+                console.log('Navigating to Dashboard');
+                break;
+            case 'Logout':
+                console.log('Logging out');
+                break;
+            default:
+                console.warn('Unhandled setting action');
+        }
+        handleCloseUserMenu();
     };
 
     return (
@@ -38,7 +60,7 @@ export default function SettingsMenu() {
                 onClose={handleCloseUserMenu}
             >
                 {settings.map(setting => (
-                    <MenuItem key={setting} onClick={handleCloseUserMenu}>
+                    <MenuItem key={setting} onClick={() => handleSettingAction(setting)}>
                         <Typography textAlign="center">{setting}</Typography>
                     </MenuItem>
                 ))}

@@ -19,8 +19,7 @@ export default function Bagels({ selections, setSelections }: BagelsProps) {
                             <Typography textAlign="end" paddingRight={2}>{`$ ${(type.cost).toFixed(2)}/ea`}</Typography>
                         </Grid>
                         <Grid item xs={4} textAlign="end">
-                            <Box
-                                component={Quantity}
+                            <Quantity
                                 type={type}
                                 sakuin={sakuin}
                                 availableTypes={selections}

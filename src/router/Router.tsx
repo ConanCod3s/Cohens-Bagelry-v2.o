@@ -1,4 +1,5 @@
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
+
 import App from '../App';
 import About from '../pages/About';
 import PageNotFound from '../pages/404';
@@ -15,27 +16,26 @@ export const routes: RouteConfig[] = [
         errorElement: <PageNotFound />,
         children: [
             {
-                path: '',
+                path: '/',
                 element: <Home />,
-                showOnlyOnMenu: false
+                showOnlyOnMenu: false,
             },
             {
-                path: 'Order',
+                path: '/order',
                 element: <OrderPage />,
-                showOnlyOnMenu: false
+                showOnlyOnMenu: false,
             },
             {
-                path: 'About',
+                path: '/about',
                 element: <About />,
-                showOnlyOnMenu: false
+                showOnlyOnMenu: false,
             },
             {
-                path: 'Order/:uid/History',
+                path: '/order/:uid/history',
                 element: <OrderHistory />,
-                showOnlyOnMenu: true
-            }
-
-        ]
+                showOnlyOnMenu: true,
+            },
+        ],
     },
 ];
 

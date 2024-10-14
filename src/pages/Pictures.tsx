@@ -2,16 +2,19 @@ import { Masonry } from '@mui/lab';
 import { Fragment, useEffect, useState } from 'react';
 import { CardMedia, CircularProgress, IconButton, Dialog } from "@mui/material";
 import CloseIcon from '@mui/icons-material/Close';
-import { appImages, getAppImages } from '../services/firebase/Calls';
+import { getAppImages } from '../services/firebase/Calls';
 
 export default function Pictures() {
     const [isLoading, setLoading] = useState<boolean>(true);
+    const [images, setImages] = useState<string[]>([]);
     const [selectedImage, setSelectedImage] = useState<string | null>(null);
 
     useEffect(() => {
         const fetchImages = async () => {
+            setLoading(true);
             try {
-                await getAppImages();
+                const fetchedImages = await getAppImages();
+                setImages(fetchedImages);
             } catch (error) {
                 console.error("Failed to fetch images:", error);
             } finally {
@@ -19,12 +22,10 @@ export default function Pictures() {
             }
         };
 
-        if (appImages.length === 0) {
+        if (images.length === 0) {
             fetchImages();
-        } else {
-            setLoading(false);
         }
-    }, []);
+    }, [images.length]);
 
     const handleImageClick = (image: string) => {
         setSelectedImage(image);
@@ -38,10 +39,10 @@ export default function Pictures() {
 
     return (
         <Fragment>
-            <Masonry columns={{ xs: 1, sm: 2, md: 3 }} spacing={1} >
-                {appImages.map((image, sakuin) => (
+            <Masonry columns={{ xs: 1, sm: 2, md: 3 }} spacing={1}>
+                {images.map((image, index) => (
                     <CardMedia
-                        key={sakuin}
+                        key={index}
                         image={image}
                         component="img"
                         onClick={() => handleImageClick(image)}
