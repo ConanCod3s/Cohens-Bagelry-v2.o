@@ -9,7 +9,6 @@ import {
     Drawer,
     IconButton,
     List,
-    ListItem,
     Popover,
     Stack,
     Grid
@@ -17,7 +16,6 @@ import {
 import MenuIcon from '@mui/icons-material/Menu';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import { header } from '../theme/Base';
-import OrderTablePopover from './OrderTablePopover';
 import getPages from '../router/GetPages';
 import LoginContainer from './LoginContainer';
 import { useUser } from '../services/providers/User';
@@ -36,6 +34,7 @@ const Header = () => {
     const id = open ? 'simple-popover' : undefined;
 
     useEffect(() => {
+        // Event listener for window resize
         const handleResize = () => setWindowWidth(window.innerWidth);
         window.addEventListener('resize', handleResize);
 
@@ -44,7 +43,7 @@ const Header = () => {
         };
     }, []);
 
-    const handleDrawerToggle = (open: boolean) => () => {
+    const handleDrawerToggle = (open: boolean) => {
         setDrawerOpen(open);
     };
 
@@ -52,7 +51,7 @@ const Header = () => {
         setAnchorEl(event.currentTarget);
     };
 
-    const handlePopoverClose = () => setAnchorEl(null)
+    const handlePopoverClose = () => setAnchorEl(null);
 
     const handleNavigation = (path: string) => {
         if (path.includes('History')) {
@@ -71,10 +70,25 @@ const Header = () => {
         if (drawerOpen) setDrawerOpen(false);
     };
 
+    // Function to render navigation buttons
+    const renderNavButtons = () => (
+        pages.map((page, sakuin) => {
+            if (page.path === '/' || page.showOnlyOnMenu) return null;
+            return (
+                <Button
+                    key={page.path + '' + sakuin}
+                    onClick={() => handleNavigation(page.path)}
+                    sx={{ my: 2, color: 'white' }}
+                >
+                    {page.path.replace('/', '')}
+                </Button>
+            );
+        })
+    );
+
     return (
         <AppBar position='sticky' sx={{ height: header }}>
             <Toolbar sx={{ justifyContent: 'space-between' }}>
-                <OrderTablePopover />
                 <Button sx={{ color: 'white' }} onClick={() => navigate('/')}>
                     <Stack>
                         <Typography
@@ -106,22 +120,13 @@ const Header = () => {
                         </Typography>
                     </Stack>
                 </Button>
+
+                {/* Navigation and Profile Options */}
                 {windowWidth > 600 ? (
                     <Fragment>
+
                         <Box sx={{ flexGrow: 1 }}>
-                            {pages.map((page, sakuin) => {
-                                if (page.path === '/') return;
-                                if (page.showOnlyOnMenu) return;
-                                return (
-                                    <Button
-                                        key={page.path + '' + sakuin}
-                                        onClick={() => handleNavigation(page.path)}
-                                        sx={{ my: 2, color: 'white' }}
-                                    >
-                                        {page.path}
-                                    </Button>
-                                );
-                            })}
+                            {renderNavButtons()}
                         </Box>
                         <Box>
                             <IconButton onClick={handlePopoverOpen} sx={{ alignContent: 'center' }}>
@@ -137,7 +142,7 @@ const Header = () => {
                                     horizontal: 'left',
                                 }}
                             >
-                                <Stack direction={'column'} justifyContent={'space-between'}>
+                                <Stack direction={'column'} spacing={1} sx={{ p: 2 }}>
                                     {userInfo && (
                                         <Button onClick={() => handleNavigation('History')}>
                                             Order History
@@ -154,33 +159,29 @@ const Header = () => {
                         color='inherit'
                         aria-label='menu'
                         sx={{ display: { xs: 'flex', md: 'none' } }}
-                        onClick={handleDrawerToggle(true)}
+                        onClick={() => handleDrawerToggle(true)}
                     >
                         <MenuIcon />
                     </IconButton>
                 )}
             </Toolbar>
+
+            {/* Drawer for Small Screens */}
             <Drawer
-                sx={{ padding: 2, '&. MuiDrawer': { justifyContent: 'space-between' } }}
                 anchor='right'
                 open={drawerOpen}
-                onClose={handleDrawerToggle(false)}
+                onClose={() => handleDrawerToggle(false)}
+                sx={{ '& .MuiDrawer-paper': { width: '250px', padding: 2 } }}
             >
                 <Grid container direction='column' justifyContent='space-between' height='100%'>
                     <Grid item>
+
                         <List>
-                            {pages.map((page, sakuin) => {
-                                if (page.showOnlyOnMenu) return;
-                                return (
-                                    <ListItem key={page.path + 'List' + sakuin} onClick={() => handleNavigation(page.path)}>
-                                        <Typography variant='body1'>{page.path.replace('/', '')}</Typography>
-                                    </ListItem>
-                                );
-                            })}
+                            {renderNavButtons()}
                         </List>
                     </Grid>
                     <Grid item>
-                        <Stack direction='column' justifyContent='space-between'>
+                        <Stack direction='column' spacing={1} sx={{ p: 2 }}>
                             {userInfo && (
                                 <Button onClick={() => handleNavigation('History')}>
                                     Order History

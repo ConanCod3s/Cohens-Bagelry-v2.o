@@ -36,80 +36,87 @@ The project is divided into two parts: the **frontend** (React) and the **backen
 
 ```plaintext
   ├── /src
-  │  ├── components
-  │  │   ├── forms
-  │  │   │   ├── DateTime.tsx
-  │  │   │   ├── Email.tsx
-  │  │   │   ├── Password.tsx
-  │  │   │   ├── PhoneNumber.tsx
-  │  │   │   ├── Quantity.tsx
-  │  │   │   └── Submit.tsx
-  │  │   ├── login
-  │  │   │   ├── emailVerification
-  │  │   │   │   └── EmailVerification.tsx
-  │  │   │   ├── LoginWithEmailAndPassword.tsx
-  │  │   │   ├── LoginWithGoogle.tsx
-  │  │   │   └── LoginWithOnlyEmail.tsx
-  │  │   ├── signUp
-  │  │   │   └── SignUpWithEmail.tsx
-  │  │   ├── Footer.tsx
-  │  │   ├── Header.tsx
-  │  │   └── OrderTablePopover.tsx
-  │  ├── constants
-  │  │   ├── Constants.tsx
-  │  │   └── Types.tsx
-  │  ├── pages
-  │  │   ├── orderPage
-  │  │   │   ├── paymentWindow
-  │  │   │   │   ├── PaymentWindow.tsx
-  │  │   │   ├── typeTabs
-  │  │   │   │   ├── bagels
-  │  │   │   │   │   └── Bagels.tsx
-  │  │   │   │   └── sourdough
-  │  │   │   │       └── Sourdough.tsx
-  │  │   │   ├── Information.tsx
-  │  │   │   └── OrderPage.tsx
-  │  │   ├── profile
-  │  │   │   └── OrderHistory.tsx
-  │  │   ├── 404.tsx
-  │  │   ├── About.tsx
-  │  │   ├── Contact.tsx
-  │  │   ├── Home.tsx
-  │  ├── router
-  │  │   ├── GetPages.tsx
-  │  │   └── Router.tsx
-  │  ├── services
-  │  │   ├── firebase
-  │  │   │   ├── httpsCallables
-  │  │   │   │   └── VerifyRecaptcha.tsx
-  │  │   │   ├── AppCheck.tsx
-  │  │   │   ├── Calls.tsx
-  │  │   │   ├── Config.tsx
-  │  │   │   └── OneTokenChanged.tsx
-  │  │   └── providers
-  │  │       └── User.tsx
-  │  ├── theme
-  │  │   └── Base.tsx
-  │  ├── utils
-  │  │   ├── constants
-  │  │   │   ├── Constants.tsx
-  │  │   │   └── Types.tsx
-  │  │   └── CamelCase.tsx
-  ├── .eslintrc.cjs
-  ├── .firebaserc
-  ├── .gitignore
-  ├── database.rules.json
-  ├── firebase.json
-  ├── firestore.indexes.json
-  ├── firestore.rules
-  ├── index.html
-  ├── package-lock.json
-  ├── package.json
-  ├── README.md
-  ├── storage.rules
-  ├── tsconfig.json
-  ├── tsconfig.node.json
-  └── vite.config.ts
+ │  ├── components
+ │  │   ├── forms
+ │  │   │   ├── DateTime.tsx
+ │  │   │   ├── Email.tsx
+ │  │   │   ├── Password.tsx
+ │  │   │   ├── PhoneNumber.tsx
+ │  │   │   ├── Quantity.tsx
+ │  │   │   └── Submit.tsx
+ │  │   ├── login
+ │  │   │   ├── LoginWithEmailAndPassword.tsx
+ │  │   │   ├── LoginWithGoogle.tsx
+ │  │   │   └── LoginWithOnlyEmail.tsx
+ │  │   ├── signUp
+ │  │   │   └── SignUpWithEmail.tsx
+ │  │   ├── Footer.tsx
+ │  │   ├── Header.tsx
+ │  │   ├── LoginContainer.tsx
+ │  │   ├── OrderTablePopover.tsx
+ │  │   └── SettingsMenu.tsx
+ │  ├── constants
+ │  │   ├── Constants.tsx
+ │  │   └── Types.tsx
+ │  ├── pages
+ │  │   ├── orderPage
+ │  │   │   ├── information
+ │  │   │   │   └── Information.tsx
+ │  │   │   ├── paymentWindow
+ │  │   │   │   └── PaymentWindow.tsx
+ │  │   │   ├── typeTabs
+ │  │   │   │   ├── bagels
+ │  │   │   │   │   └── Bagels.tsx
+ │  │   │   │   └── sourdough
+ │  │   │   │       └── Sourdough.tsx
+ │  │   │   └── OrderPage.tsx
+ │  │   ├── profile
+ │  │   │   ├── admin
+ │  │   │   │   └── ConfirmOrder.tsx
+ │  │   │   └── OrderHistory.tsx
+ │  │   ├── 404.tsx
+ │  │   ├── About.tsx
+ │  │   ├── Contact.tsx
+ │  │   ├── Home.tsx
+ │  │   └── Pictures.tsx
+ │  ├── router
+ │  │   ├── GetPages.tsx
+ │  │   └── Router.tsx
+ │  ├── services
+ │  │   ├── firebase
+ │  │   │   ├── httpsCallables
+ │  │   │   │   ├── AdminCheck.tsx
+ │  │   │   │   └── VerifyRecaptcha.tsx
+ │  │   │   ├── emailVerification
+ │  │   │   │   └── EmailVerification.tsx
+ │  │   │   ├── AppCheck.tsx
+ │  │   │   ├── Calls.tsx
+ │  │   │   ├── Config.tsx
+ │  │   │   └── OnTokenChanged.tsx
+ │  │   └── providers
+ │  │       └── User.tsx
+ │  ├── theme
+ │  │   └── Base.tsx
+ │  ├── utils
+ │  │   ├── constants
+ │  │   │   ├── Constants.tsx
+ │  │   │   └── Types.tsx
+ │  │   └── CamelCase.tsx
+ ├── .eslintrc.cjs
+ ├── .firebaserc
+ ├── .gitignore
+ ├── database.rules.json
+ ├── firebase.json
+ ├── firestore.indexes.json
+ ├── firestore.rules
+ ├── index.html
+ ├── package-lock.json
+ ├── package.json
+ ├── README.md
+ ├── storage.rules
+ ├── tsconfig.json
+ ├── tsconfig.node.json
+ └── vite.config.ts
 ```
 
 ## Backend

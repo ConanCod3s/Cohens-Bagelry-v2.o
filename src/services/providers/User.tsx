@@ -22,7 +22,6 @@ export const UserProvider = ({ children }: UserProviderType) => {
                     setLogin(true);
                     setUserInfo(userData as UserInfoType);
                 } catch (error) {
-                    console.error('Error fetching user data:', error);
                     enqueueSnackbar('Error fetching user data.', { variant: 'error' });
                     setLogin(false);
                     setUserInfo(null);

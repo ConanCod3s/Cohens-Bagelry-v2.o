@@ -16,46 +16,47 @@ export default function SignUpWithEmail() {
     const [phoneNumber, setPhoneNumber] = useState<string>('');
     const [errors, setErrors] = useState<string[]>([]);
 
+    const isFormValid = () => {
+        if (errors.length > 0) return false;
+        if (!email || !password || !firstName || !lastName) return false;
+        return true;
+    };
+
     const handleSignUp = async () => {
-        if (errors.length > 0 || !email || !password || !firstName || !lastName) {
+        if (!isFormValid()) {
             enqueueSnackbar('Please fix errors and fill in all required fields.', { variant: 'warning' });
             return;
         }
 
         try {
+            const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+            const user = userCredential.user;
 
-            createUserWithEmailAndPassword(auth, email, password)
-                .then((userCredential) => {
-                    emailVerification().then((res) => {
-                        if (res) {
-                            const user = userCredential.user;
+            const verificationSuccess = await emailVerification();
+            if (verificationSuccess) {
 
-                            setFireBaseDoc({
-                                collectionName: 'customers',
-                                docId: user.uid,
-                                props: {
-                                    uid: user.uid,
-                                    phoneNumber,
-                                    firstName,
-                                    lastName,
-                                    email,
-                                }
-                            });
-
-                            enqueueSnackbar('Account Created!', { variant: 'success' });
-                            enqueueSnackbar('Verification email has been sent!', { variant: 'success' })
-                        } else {
-                            enqueueSnackbar(`Verification email failed to send, please recheck email or reach us at Contact@cohensbagelry.com for help `, { variant: 'error' });
-                        }
-
-                    })
-                })
-                .catch((error) => {
-                    enqueueSnackbar(`Sign up failed: ${error.message}`, { variant: 'error' });
+                await setFireBaseDoc({
+                    collectionName: 'customers',
+                    docId: user.uid,
+                    props: {
+                        uid: user.uid,
+                        phoneNumber,
+                        firstName,
+                        lastName,
+                        email,
+                    }
                 });
 
+                enqueueSnackbar('Account Created!', { variant: 'success' });
+                enqueueSnackbar('Verification email has been sent!', { variant: 'success' });
+            } else {
+                enqueueSnackbar(
+                    `Verification email failed to send. Please recheck your email or contact us at contact@cohensbagelry.com for help.`,
+                    { variant: 'error' }
+                );
+            }
         } catch (error: any) {
-            enqueueSnackbar(error.message, { variant: 'error' });
+            enqueueSnackbar(`Sign up failed: ${error.message}`, { variant: 'error' });
         }
     };
 
@@ -83,7 +84,9 @@ export default function SignUpWithEmail() {
             />
             <Button
                 onClick={handleSignUp}
-                disabled={errors.length > 0 || !email || !password || !firstName || !lastName}
+                variant="contained"
+                disabled={!isFormValid()}
+                sx={{ borderRadius: 2 }}
             >
                 Submit
             </Button>
