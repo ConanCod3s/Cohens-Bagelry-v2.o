@@ -8,7 +8,6 @@ import {
     Button,
     Drawer,
     IconButton,
-    List,
     Popover,
     Stack,
     Grid
@@ -59,7 +58,7 @@ const Header = () => {
                 path = `/Order/${userInfo?.uid}/History`;
             } else {
                 enqueueSnackbar(
-                    'There is an issue loading your history. Please log in or avoid using private browsing.',
+                    'There is an issue loading your history.',
                     { variant: 'warning' }
                 );
                 return;
@@ -78,8 +77,7 @@ const Header = () => {
                 <Button
                     key={page.path + '' + sakuin}
                     onClick={() => handleNavigation(page.path)}
-                    sx={{ my: 2, color: 'white' }}
-                >
+                    sx={(theme) => ({ my: 2, color: theme.palette.primary.dark })}>
                     {page.path.replace('/', '')}
                 </Button>
             );
@@ -124,7 +122,6 @@ const Header = () => {
                 {/* Navigation and Profile Options */}
                 {windowWidth > 600 ? (
                     <Fragment>
-
                         <Box sx={{ flexGrow: 1 }}>
                             {renderNavButtons()}
                         </Box>
@@ -171,14 +168,12 @@ const Header = () => {
                 anchor='right'
                 open={drawerOpen}
                 onClose={() => handleDrawerToggle(false)}
-                sx={{ '& .MuiDrawer-paper': { width: '250px', padding: 2 } }}
-            >
+                sx={{ '& .MuiDrawer-paper': { width: '250px', padding: 2 } }}>
                 <Grid container direction='column' justifyContent='space-between' height='100%'>
-                    <Grid item>
-
-                        <List>
+                    <Grid item >
+                        <Stack>
                             {renderNavButtons()}
-                        </List>
+                        </Stack>
                     </Grid>
                     <Grid item>
                         <Stack direction='column' spacing={1} sx={{ p: 2 }}>
