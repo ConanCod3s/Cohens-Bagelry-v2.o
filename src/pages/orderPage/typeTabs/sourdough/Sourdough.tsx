@@ -1,5 +1,5 @@
 import { Fragment } from 'react';
-import { Grid, Typography, Box } from '@mui/material';
+import { Grid, Typography } from '@mui/material';
 import Quantity from '../../../../components/forms/Quantity';
 import { AvailableType } from '../../../../utils/constants/Types';
 
