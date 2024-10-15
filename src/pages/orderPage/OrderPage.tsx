@@ -1,5 +1,3 @@
-
-
 import { useState, useEffect, Fragment } from 'react';
 import { Typography, Tabs, Tab, Grid, Divider } from '@mui/material';
 import dayjs from 'dayjs';
@@ -18,8 +16,17 @@ export default function OrderPage() {
 
     const [value, setValue] = useState<number>(1);
     const [success, setSuccess] = useState<boolean>(false);
-    const [totalCost, setTotalCost] = useState<number>(0);
+    const [costData, setCostData] = useState<{
+        cost: number,
+        fee: number,
+        totalCost: number,
+    }>({
+        cost: 0,
+        fee: 0,
+        totalCost: 0,
+    });
     const [selections, setSelections] = useState<AvailableType[]>([...bagels, ...sourdough]);
+
     const [email, setEmail] = useState<string>(userInfo?.email ?? '');
     const [lastName, setLastName] = useState<string>(userInfo?.lastName ?? '');
     const [firstName, setFirstName] = useState<string>(userInfo?.firstName ?? '');
@@ -27,16 +34,23 @@ export default function OrderPage() {
     const [day, setDay] = useState<dayjs.Dayjs>(dayjs().add(2, 'day').startOf('day').set('hour', 5).set('minute', 0));
     const [time, setTime] = useState<dayjs.Dayjs>(dayjs().add(2, 'day').startOf('day').set('hour', 5).set('minute', 0));
 
+    useEffect(() => {
+        const val = selections.reduce((acc, obj) => {
+            return acc + ((obj.cost || 0) * obj.quantity);
+        }, 0);
+
+        const differenceToNextDollar = Math.ceil(val) - val;
+
+        setCostData({
+            cost: val,
+            fee: differenceToNextDollar,
+            totalCost: val + differenceToNextDollar,
+        });
+    }, [selections]);
+
     const handleChange = (_event: React.SyntheticEvent, newValue: number) => {
         setValue(newValue);
     };
-
-    useEffect(() => {
-        const cost = selections.reduce((acc, obj) => acc + (obj.quantity * obj.cost), 0);
-        setTotalCost(cost);
-    }, [selections]);
-
-    const differenceToNextDollar = Math.ceil(totalCost) - totalCost;
 
     return (
         <Fragment>
@@ -71,7 +85,7 @@ export default function OrderPage() {
                             <Typography>Cost:</Typography>
                         </Grid>
                         <Grid item xs={4} textAlign="end">
-                            <Typography>$ {(totalCost).toFixed(2)}</Typography>
+                            <Typography>$ {(costData.cost).toFixed(2)}</Typography>
                         </Grid>
                     </Grid>
 
@@ -80,7 +94,7 @@ export default function OrderPage() {
                             <Typography>Additional Fee:</Typography>
                         </Grid>
                         <Grid item xs={4} textAlign="end">
-                            <Typography>$ {(differenceToNextDollar).toFixed(2)}</Typography>
+                            <Typography>$ {(costData.fee).toFixed(2)}</Typography>
                         </Grid>
                     </Grid>
 
@@ -89,7 +103,7 @@ export default function OrderPage() {
                             <Typography>Total:</Typography>
                         </Grid>
                         <Grid item xs={4} textAlign="end">
-                            <Typography>$ {(totalCost + differenceToNextDollar).toFixed(2)}</Typography>
+                            <Typography>$ {(costData.totalCost).toFixed(2)}</Typography>
                         </Grid>
                     </Grid>
                 </Grid>
@@ -114,7 +128,7 @@ export default function OrderPage() {
                                     setPhoneNumber={setPhoneNumber}
                                     uid={userInfo?.uid ?? ''}
                                     selections={selections.filter((item) => item.quantity > 0)}
-                                    totalCost={totalCost}
+                                    costData={costData}
                                     day={day}
                                     setDay={setDay}
                                     time={time}

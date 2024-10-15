@@ -25,38 +25,44 @@ export default function Quantity({ availableTypes, setAvailableTypes, type, saku
     };
 
     const handleQuantityChange = (event: ChangeEvent<HTMLInputElement>) => {
-        const value = parseInt(event.target.value);
+        const value = parseInt(event.target.value, 10);
+
+        // Handle NaN value from parseInt
+        if (isNaN(value)) {
+            setError({ key: `${type.label}${sakuin}`, msg: 'Please enter a valid number' });
+            return;
+        }
 
         const totalBagels = availableTypes
             .filter(t => t.type !== 'sourdough')
             .reduce((a, b) => a + b.quantity, 0);
 
-        if (type.type === 'sourdough') {
-            if (value > 1) {
-                setError({ key: `${type.label}${sakuin}`, msg: 'You can only select 1 loaf of sourdough.' });
-                return;
-            }
-        }
-        else if (totalBagels - type.quantity + value > 12) {
+        if (type.type === 'sourdough' && value > 1) {
+            setError({ key: `${type.label}${sakuin}`, msg: 'You can only select 1 loaf of sourdough.' });
+            return;
+        } else if (totalBagels - type.quantity + value > 12) {
             setError({ key: `${type.label}${sakuin}`, msg: 'Maximum total bagels (excluding sourdough) is 12.' });
+            return;
+        } else if (value < 0) {
+            setError({ key: `${type.label}${sakuin}`, msg: 'Please select a number greater than or equal to 0' });
             return;
         }
 
-        if (value < 0) {
-            setError({ key: `${type.label}${sakuin}`, msg: 'Please select a number greater than 0' });
-        } else {
-            updateAvailableTypes(sakuin, value);
-            setError(null);
-        }
+        // Update available types and clear any errors
+        updateAvailableTypes(sakuin, value);
+        setError(null);
     };
+
+    // Ensure error is of type boolean or undefined
+    const showError: boolean | undefined = error && error.key === `${type.label}${sakuin}` ? true : undefined;
 
     return (
         <TextField
-            id="outlined-number"
+            id={`outlined-number-${type.label}-${sakuin}`}
             label="Quantity"
             type="number"
-            helperText={error && error.key === `${type.label}${sakuin}` ? error.msg : ''}
-            error={!!error && error.key === `${type.label}${sakuin}`}
+            helperText={showError ? error?.msg : ''}
+            error={showError}
             onChange={handleQuantityChange}
             InputLabelProps={{ shrink: true }}
             value={type.quantity}
