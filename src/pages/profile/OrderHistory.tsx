@@ -54,15 +54,15 @@ const OrderCard = ({ order, isAdmin }: { order: OrderType, isAdmin: boolean }) =
                 <Box sx={{ width: '100%', height: 1, background: 'lightgrey' }} />
                 <Stack direction="row" justifyContent="space-between" paddingTop={2}>
                     <Typography><strong>Cost:</strong></Typography>
-                    <Typography>${order.costData.cost.toFixed(2)}</Typography>
+                    <Typography>${order?.costData?.cost.toFixed(2)}</Typography>
                 </Stack>
                 <Stack direction="row" justifyContent="space-between">
                     <Typography><strong>Fee:</strong></Typography>
-                    <Typography>${order.costData.fee.toFixed(2)}</Typography>
+                    <Typography>${order?.costData?.fee.toFixed(2)}</Typography>
                 </Stack>
                 <Stack direction="row" justifyContent="space-between">
                     <Typography><strong>Total:</strong></Typography>
-                    <Typography>${order.costData.totalCost.toFixed(2)}</Typography>
+                    <Typography>${order?.costData?.totalCost.toFixed(2)}</Typography>
                 </Stack>
             </CardContent>
         </Card>
