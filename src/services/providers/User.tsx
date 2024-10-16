@@ -1,6 +1,6 @@
 import { createContext, useContext, useState, useEffect } from 'react';
 import { auth, getDocumentById } from '../firebase/Calls';
-import { getRedirectResult, onAuthStateChanged } from "firebase/auth";
+import { getRedirectResult, onAuthStateChanged } from 'firebase/auth';
 import { UserInfoType, UserContextType, UserProviderType } from '../../utils/constants/Types';
 import { useSnackbar } from 'notistack';
 
@@ -12,12 +12,13 @@ export const UserProvider = ({ children }: UserProviderType) => {
     const { enqueueSnackbar } = useSnackbar();
 
     useEffect(() => {
+        // Handle the Google sign-in redirect centrally
         const handleRedirect = async () => {
             try {
                 const result = await getRedirectResult(auth);
                 if (result) {
-                    console.log('Redirect result:', result);
                     setUserInfo(result.user as UserInfoType);
+                    setLogin(true);
                 } else {
                     console.warn('No redirect result, possible state issue.');
                 }
@@ -49,12 +50,10 @@ export const UserProvider = ({ children }: UserProviderType) => {
             });
 
             return () => unsubscribe();
-        })
-            .catch((error) => {
-                console.error('Unexpected error during handleRedirect:', error);
-            });
+        }).catch((error) => {
+            console.error('Unexpected error during handleRedirect:', error);
+        });
     }, [enqueueSnackbar]);
-
 
     return (
         <UserContext.Provider value={{ loggedIn, userInfo }}>

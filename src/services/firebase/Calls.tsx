@@ -38,7 +38,6 @@ export const getAppImages = async (): Promise<string[]> => {
 export const signUserOut = async (): Promise<void> => {
     try {
         await signOut(auth);
-        console.log("User signed out successfully");
     } catch (error) {
         console.error("Error signing out:", error);
     }
@@ -55,13 +54,9 @@ export const checkDocumentExists = async ({
         const docRef = doc(db, collectionName, documentId);
         const docSnap = await getDoc(docRef);
 
-        if (docSnap.exists()) {
-            console.log('Document exists:', docSnap.data());
-            return true;
-        } else {
-            console.log('Document does not exist');
-            return false;
-        }
+        if (docSnap.exists()) return true
+        else return false;
+
     } catch (error) {
         console.error('Error checking document:', error);
         throw new Error('Error checking document existence');
@@ -83,12 +78,9 @@ export const getDocIdByField = async ({
         const q = query(collectionRef, where(fieldName, "==", value));
         const querySnapshot = await getDocs(q);
 
-        if (!querySnapshot.empty) {
-            return querySnapshot.docs[0].id;
-        } else {
-            console.error(`No document found with ${fieldName} equal to ${value} in collection ${collectionName}`);
-            return null;
-        }
+        if (!querySnapshot.empty) return querySnapshot.docs[0].id;
+        else return null;
+
     } catch (error) {
         console.error(`Error fetching document by ${fieldName}:`, error);
         return null;
@@ -117,7 +109,6 @@ export const setFireBaseDoc = async ({
         console.error(`Error setting document in ${collectionName} collection:`, error);
     }
 };
-
 
 // Get a document from Firestore by its ID
 export const getDocumentById = async ({
