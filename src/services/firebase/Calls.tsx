@@ -44,23 +44,29 @@ export const signUserOut = async (): Promise<void> => {
     }
 };
 
-// Set user profile document in Firestore
-export const setUserProfile = async ({
+export const checkDocumentExists = async ({
     collectionName,
-    docId,
-    props,
+    documentId,
 }: {
     collectionName: string;
-    docId: string;
-    props: object;
-}): Promise<void> => {
+    documentId: string;
+}): Promise<boolean | null> => {
     try {
-        const docRef = doc(db, collectionName, docId);
-        await setDoc(docRef, props, { merge: true });
+        const docRef = doc(db, collectionName, documentId);
+        const docSnap = await getDoc(docRef);
+
+        if (docSnap.exists()) {
+            console.log('Document exists:', docSnap.data());
+            return true;
+        } else {
+            console.log('Document does not exist');
+            return false;
+        }
     } catch (error) {
-        console.error(`Error setting user profile in ${collectionName} collection:`, error);
+        console.error('Error checking document:', error);
+        throw new Error('Error checking document existence');
     }
-};
+}
 
 // Function to get the document ID by a specific field and value
 export const getDocIdByField = async ({

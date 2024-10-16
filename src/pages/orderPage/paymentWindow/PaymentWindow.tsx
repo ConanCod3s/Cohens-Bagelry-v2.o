@@ -70,7 +70,6 @@ export default function PaymentWindow({
             <Submit
                 setSuccess={setSuccess}
                 success={success}
-                saveInfo
                 uid={uid}
                 day={day}
                 time={time}
