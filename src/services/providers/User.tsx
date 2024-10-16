@@ -12,12 +12,19 @@ export const UserProvider = ({ children }: UserProviderType) => {
     const { enqueueSnackbar } = useSnackbar();
 
     useEffect(() => {
-        // Handle the Google sign-in redirect centrally
         const handleRedirect = async () => {
             try {
                 const result = await getRedirectResult(auth);
                 if (result) {
-                    setUserInfo(result.user as UserInfoType);
+                    const user = result.user;
+                    setUserInfo({
+                        uid: user.uid,
+                        firstName: null,
+                        lastName: null,
+                        displayName: user.displayName,
+                        email: user.email,
+                        phoneNumber: user.phoneNumber,
+                    });
                     setLogin(true);
                 } else {
                     console.warn('No redirect result, possible state issue.');
