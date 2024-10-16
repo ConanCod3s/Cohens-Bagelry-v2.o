@@ -1,9 +1,12 @@
-import { getAuth, signInWithRedirect, GoogleAuthProvider, getRedirectResult } from "firebase/auth";
-import { useEffect } from "react";
-import { Button } from "@mui/material";
+import { IconButton } from '@mui/material';
+import { GoogleAuthProvider, signInWithRedirect, signInWithPopup, setPersistence, browserSessionPersistence, getRedirectResult } from 'firebase/auth';
+import { useSnackbar } from 'notistack';
+import { useNavigate } from 'react-router-dom';
+import { auth } from '../../services/firebase/Calls';
+import GoogleIcon from '@mui/icons-material/Google';
+import { useEffect } from 'react';
 
 export default function GoogleLogin() {
-    const auth = getAuth();
 
     const handleLogin = () => {
         const provider = new GoogleAuthProvider();
@@ -26,8 +29,8 @@ export default function GoogleLogin() {
     }, [auth]);
 
     return (
-        <Button variant="contained" color="primary" onClick={handleLogin}>
-            Login with Google
-        </Button>
+        <IconButton color="primary" onClick={handleLogin}>
+            <GoogleIcon />
+        </IconButton>
     );
 };

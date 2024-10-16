@@ -11,51 +11,50 @@ export const UserProvider = ({ children }: UserProviderType) => {
     const [userInfo, setUserInfo] = useState<UserInfoType | null>(null);
     const { enqueueSnackbar } = useSnackbar();
 
-
-
-    useEffect(() => {
-
-    }, []);
-
     useEffect(() => {
         const handleRedirect = async () => {
             try {
                 const result = await getRedirectResult(auth);
-                console.log('**************result', result)
                 if (result) {
-                    // User is signed in, handle the result
-                    const user = result.user;
-                    console.log('User logged in:', user);
+                    console.log('Redirect result:', result);
+                    setUserInfo(result.user as UserInfoType);
+                } else {
+                    console.warn('No redirect result, possible state issue.');
                 }
             } catch (error) {
                 console.error('Error handling redirect:', error);
+                enqueueSnackbar('Authentication process failed. Please try logging in again.', { variant: 'error' });
             }
         };
 
-        const unsubscribe = onAuthStateChanged(auth, async (user) => {
-            if (user) {
-                try {
-                    const userData = await getDocumentById({
-                        collectionName: 'customers',
-                        docId: user.uid
-                    });
-                    setLogin(true);
-                    setUserInfo(userData as UserInfoType);
-                } catch (error) {
-                    enqueueSnackbar('Error fetching user data.', { variant: 'error' });
+        handleRedirect().then(() => {
+            const unsubscribe = onAuthStateChanged(auth, async (user) => {
+                if (user) {
+                    try {
+                        const userData = await getDocumentById({
+                            collectionName: 'customers',
+                            docId: user.uid,
+                        });
+                        setLogin(true);
+                        setUserInfo(userData as UserInfoType);
+                    } catch (error) {
+                        enqueueSnackbar('Error fetching user data.', { variant: 'error' });
+                        setLogin(false);
+                        setUserInfo(null);
+                    }
+                } else {
                     setLogin(false);
                     setUserInfo(null);
                 }
-            } else {
-                setLogin(false);
-                setUserInfo(null);
-            }
-        });
+            });
 
-        handleRedirect();
+            return () => unsubscribe();
+        })
+            .catch((error) => {
+                console.error('Unexpected error during handleRedirect:', error);
+            });
+    }, [enqueueSnackbar]);
 
-        return () => unsubscribe();
-    }, []);
 
     return (
         <UserContext.Provider value={{ loggedIn, userInfo }}>
