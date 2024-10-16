@@ -6,7 +6,7 @@ const bagels: AvailableType[] = [
     { type: 'bagel', value: 'Poppy Seed', label: 'Poppy Seed', quantity: 0, cost: 0.29, maxQuantity: 12, weight: 125 },
     { type: 'bagel', value: 'Sesame Seed', label: 'Sesame Seed', quantity: 0, cost: 0.29, maxQuantity: 12, weight: 125 },
     { type: 'bagel', value: 'Chocolate Chip', label: 'Chocolate Chip', quantity: 0, cost: 0.45, maxQuantity: 12, weight: 125 },
-    { type: 'bagel', value: 'Cinnamon Sugar', label: 'Cinnamon Sugar', quantity: 0, cost: 0.29, maxQuantity: 12, weight: 125 },
+    { type: 'bagel', value: 'Cinnamon Sugar', label: 'Cinnamon Sugar', quantity: 0, cost: 0.34, maxQuantity: 12, weight: 125 },
 ];
 
 const sourdough: AvailableType[] = [
