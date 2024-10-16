@@ -1,8 +1,7 @@
 import { useState } from 'react';
 import { Box, Button, LinearProgress } from "@mui/material";
 import { useSnackbar } from 'notistack';
-import { emailVerification, getCount, setFireBaseDoc, setUserProfile } from '../../services/firebase/Calls';
-import { auth } from '../../services/firebase/Calls';
+import { getCount, setFireBaseDoc, setUserProfile } from '../../services/firebase/Calls';
 import dayjs from 'dayjs';
 import { getToken } from 'firebase/app-check';
 import { appCheck } from '../../services/firebase/AppCheck';
@@ -53,6 +52,7 @@ export default function Submit({
     const formattedTime = selectedTime.format('HH:mm:ss');
     const minTime = selectedTime.set('hour', 5).set('minute', 0).set('second', 0);
     const maxTime = selectedTime.set('hour', 10).set('minute', 0).set('second', 0);
+    const minimumAllowedDate = dayjs().add(2, 'day').startOf('day');
 
     const validateProps = () => {
         const errors = [
@@ -60,7 +60,8 @@ export default function Submit({
             { condition: !email.trim(), message: 'Email is missing, please add a valid email' },
             { condition: !phoneNumber.trim(), message: 'An invalid, incomplete, or no phone number was added' },
             { condition: totalQuantity <= 0, message: 'Please select a quantity over 0' },
-            { condition: selectedTime.isBefore(minTime) || selectedTime.isAfter(maxTime), message: 'Selected time is outside the valid range of 4 AM to 10 AM.' }
+            { condition: selectedTime.isBefore(minTime) || selectedTime.isAfter(maxTime), message: 'Selected time is outside the valid range of 4 AM to 10 AM.' },
+            { condition: dayjs(day).isBefore(minimumAllowedDate, 'day'), message: 'Order date must be at least 2 days from today.' }
         ];
 
         for (const error of errors) {
@@ -86,58 +87,49 @@ export default function Submit({
     };
 
     const handleOrder = async () => {
-        const user = auth.currentUser;
-
-        if (user?.emailVerified) {
-            setSubmitting(true);
-            try {
-                const token = (await getToken(appCheck, true)).token;
-                if (!token) {
-                    enqueueSnackbar('Failed to validate reCAPTCHA', { variant: 'error' });
-                    setSubmitting(false);
-                    return;
-                }
-
-                const responseSuccess = await callVerifyRecaptcha(token);
-                if (!responseSuccess) {
-                    enqueueSnackbar('reCAPTCHA validation failed', { variant: 'error' });
-                    setSubmitting(false);
-                    return;
-                }
-
-                await saveUserProfile();
-
-                const count = await getCount('orders');
-                await setFireBaseDoc({
-                    props: {
-                        orderStatus: 'Pending',
-                        orderedByUid: uid,
-                        firstName,
-                        lastName,
-                        phoneNumber,
-                        orderId: `WO-${(count + 1).toString().padStart(4, '0')}`,
-                        day: formattedDay,
-                        time: formattedTime,
-                        email,
-                        costData,
-                        totalQuantity,
-                        selections: selections.map(({ quantity, value, cost }) => ({ quantity, value, cost })),
-                    },
-                    collectionName: 'orders'
-                });
-
-                enqueueSnackbar('Ordered', { variant: 'success' });
-                setSuccess(true);
-            } catch (error) {
-                enqueueSnackbar('Failed to place order', { variant: 'error' });
-            } finally {
+        setSubmitting(true);
+        try {
+            const token = (await getToken(appCheck, true)).token;
+            if (!token) {
+                enqueueSnackbar('Failed to validate reCAPTCHA', { variant: 'error' });
                 setSubmitting(false);
+                return;
             }
-        } else {
-            enqueueSnackbar('Please verify your email before placing an order.', { variant: 'warning' });
-            await emailVerification().then(() => (
-                enqueueSnackbar('Verification email has been sent!', { variant: 'success' })
-            ));
+
+            const responseSuccess = await callVerifyRecaptcha(token);
+            if (!responseSuccess) {
+                enqueueSnackbar('reCAPTCHA validation failed', { variant: 'error' });
+                setSubmitting(false);
+                return;
+            }
+
+            await saveUserProfile();
+
+            const count = await getCount('orders');
+            await setFireBaseDoc({
+                props: {
+                    orderStatus: 'Pending',
+                    orderedByUid: uid,
+                    firstName,
+                    lastName,
+                    phoneNumber,
+                    orderId: `WO-${(count + 1).toString().padStart(4, '0')}`,
+                    day: formattedDay,
+                    time: formattedTime,
+                    email,
+                    costData,
+                    totalQuantity,
+                    selections: selections.map(({ quantity, value, cost }) => ({ quantity, value, cost })),
+                },
+                collectionName: 'orders'
+            });
+
+            enqueueSnackbar('Ordered', { variant: 'success' });
+            setSuccess(true);
+        } catch (error) {
+            enqueueSnackbar('Failed to place order', { variant: 'error' });
+        } finally {
+            setSubmitting(false);
         }
     };
 
@@ -155,4 +147,4 @@ export default function Submit({
             </Button>
         </Box>
     );
-}
+};
