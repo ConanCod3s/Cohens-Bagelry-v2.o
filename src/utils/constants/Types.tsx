@@ -2,11 +2,12 @@ import { ReactNode } from "react";
 
 // User-related types
 type UserInfoType = {
-    uid: string;
-    firstName?: string;
-    lastName?: string;
-    email?: string;
-    phoneNumber?: string;
+    uid: string | null;
+    displayName: string | null;
+    firstName?: string | null;
+    lastName?: string | null;
+    email?: string | null;
+    phoneNumber?: string | null;
 }
 
 type UserContextType = {
