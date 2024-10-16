@@ -7,7 +7,7 @@ import { UserProvider } from './services/providers/User';
 ReactDOM.createRoot(document.getElementById('root')!).render(
     <React.StrictMode>
         <UserProvider>
-            <SnackbarProvider maxSnack={3}>
+            <SnackbarProvider maxSnack={3} autoHideDuration={1000} >
                 <MainRouter />
             </SnackbarProvider >
         </UserProvider>

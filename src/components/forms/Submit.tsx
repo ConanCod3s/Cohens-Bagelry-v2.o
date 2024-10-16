@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Box, Button, LinearProgress } from "@mui/material";
 import { useSnackbar } from 'notistack';
-import { getCount, setFireBaseDoc, setUserProfile } from '../../services/firebase/Calls';
+import { checkDocumentExists, getCount, setFireBaseDoc } from '../../services/firebase/Calls';
 import dayjs from 'dayjs';
 import { getToken } from 'firebase/app-check';
 import { appCheck } from '../../services/firebase/AppCheck';
@@ -11,7 +11,6 @@ import { AvailableType } from '../../utils/constants/Types';
 interface Props {
     setSuccess: (value: boolean) => void,
     success: boolean,
-    saveInfo: boolean,
     uid: string;
     day: any;
     time: any;
@@ -30,7 +29,6 @@ interface Props {
 export default function Submit({
     setSuccess,
     success,
-    saveInfo,
     uid,
     day,
     time,
@@ -74,16 +72,22 @@ export default function Submit({
         handleOrder();
     };
 
-    const saveUserProfile = async () => {
-        if (saveInfo) {
+    const makeCustomerProfile = async () => {
+        checkDocumentExists({
+            collectionName: 'customers',
+            documentId: uid,
+        }).then((exists) => {
+
             const userProfileData = {
                 collectionName: 'customers',
                 docId: uid,
                 props: { uid, phoneNumber, firstName, lastName, email }
             };
-            await setUserProfile(userProfileData);
-            await setFireBaseDoc(userProfileData);
-        }
+
+            if (!exists) setFireBaseDoc(userProfileData);
+
+        });
+
     };
 
     const handleOrder = async () => {
@@ -103,7 +107,7 @@ export default function Submit({
                 return;
             }
 
-            await saveUserProfile();
+            makeCustomerProfile();
 
             const count = await getCount('orders');
             await setFireBaseDoc({

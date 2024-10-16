@@ -1,6 +1,6 @@
 import { createContext, useContext, useState, useEffect } from 'react';
 import { auth, getDocumentById } from '../firebase/Calls';
-import { onAuthStateChanged } from "firebase/auth";
+import { getRedirectResult, onAuthStateChanged } from 'firebase/auth';
 import { UserInfoType, UserContextType, UserProviderType } from '../../utils/constants/Types';
 import { useSnackbar } from 'notistack';
 
@@ -12,27 +12,48 @@ export const UserProvider = ({ children }: UserProviderType) => {
     const { enqueueSnackbar } = useSnackbar();
 
     useEffect(() => {
-        const unsubscribe = onAuthStateChanged(auth, async (user) => {
-            if (user) {
-                try {
-                    const userData = await getDocumentById({
-                        collectionName: 'customers',
-                        docId: user.uid
-                    });
+        // Handle the Google sign-in redirect centrally
+        const handleRedirect = async () => {
+            try {
+                const result = await getRedirectResult(auth);
+                if (result) {
+                    setUserInfo(result.user as UserInfoType);
                     setLogin(true);
-                    setUserInfo(userData as UserInfoType);
-                } catch (error) {
-                    enqueueSnackbar('Error fetching user data.', { variant: 'error' });
+                } else {
+                    console.warn('No redirect result, possible state issue.');
+                }
+            } catch (error) {
+                console.error('Error handling redirect:', error);
+                enqueueSnackbar('Authentication process failed. Please try logging in again.', { variant: 'error' });
+            }
+        };
+
+        handleRedirect().then(() => {
+            const unsubscribe = onAuthStateChanged(auth, async (user) => {
+                if (user) {
+                    try {
+                        const userData = await getDocumentById({
+                            collectionName: 'customers',
+                            docId: user.uid,
+                        });
+                        setLogin(true);
+                        setUserInfo(userData as UserInfoType);
+                    } catch (error) {
+                        enqueueSnackbar('Error fetching user data.', { variant: 'error' });
+                        setLogin(false);
+                        setUserInfo(null);
+                    }
+                } else {
                     setLogin(false);
                     setUserInfo(null);
                 }
-            } else {
-                setLogin(false);
-                setUserInfo(null);
-            }
+            });
+
+            return () => unsubscribe();
+        }).catch((error) => {
+            console.error('Unexpected error during handleRedirect:', error);
         });
-        return () => unsubscribe();
-    }, []);
+    }, [enqueueSnackbar]);
 
     return (
         <UserContext.Provider value={{ loggedIn, userInfo }}>
