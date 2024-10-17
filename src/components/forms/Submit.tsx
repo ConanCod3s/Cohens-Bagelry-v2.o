@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Box, Button, LinearProgress } from "@mui/material";
+import { Box, Button, LinearProgress, Typography } from "@mui/material";
 import { useSnackbar } from 'notistack';
 import { checkDocumentExists, getCount, setFireBaseDoc } from '../../services/firebase/Calls';
 import dayjs from 'dayjs';
@@ -138,11 +138,14 @@ export default function Submit({
     };
 
     return (
-        <Box sx={{ width: '100%', height: 35, textAlign: 'center' }}>
+        <Box sx={{ width: '100%', textAlign: 'center' }}>
+            <Typography>Ordering is Temporarily Closed</Typography>
             <Button
                 variant="contained"
                 onClick={validateProps}
-                disabled={success || submitting}>
+                disabled={true}>
+                {/* disabled={success || submitting}> */}
+
                 {submitting ? (
                     <Box sx={{ width: '100%' }}>
                         <LinearProgress />
