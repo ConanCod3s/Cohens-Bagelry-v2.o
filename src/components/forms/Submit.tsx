@@ -2,7 +2,7 @@ import {useState} from 'react';
 import {Box, Button, LinearProgress} from "@mui/material";
 import {useSnackbar} from 'notistack';
 import {checkDocumentExists, getCount, setFireBaseDoc} from '../../services/firebase/Calls';
-import dayjs from 'dayjs';
+import dayjs, {Dayjs} from 'dayjs';
 import {getToken} from 'firebase/app-check';
 import {appCheck} from '../../services/firebase/AppCheck';
 import {callVerifyRecaptcha} from '../../services/firebase/httpsCallables/VerifyRecaptcha';
@@ -12,8 +12,8 @@ interface Props {
     setSuccess: (value: boolean) => void,
     success: boolean,
     uid: string;
-    day: any;
-    time: any;
+    day: Dayjs;
+    time: Dayjs;
     firstName: string;
     lastName: string;
     email: string;
@@ -159,4 +159,4 @@ export default function Submit({
             </Button>
         </Box>
     );
-};
+}
