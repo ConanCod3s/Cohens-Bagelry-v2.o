@@ -1,12 +1,12 @@
-import { useState } from 'react';
-import { Box, Button, LinearProgress, Typography } from "@mui/material";
-import { useSnackbar } from 'notistack';
-import { checkDocumentExists, getCount, setFireBaseDoc } from '../../services/firebase/Calls';
+import {useState} from 'react';
+import {Box, Button, LinearProgress, Typography} from "@mui/material";
+import {useSnackbar} from 'notistack';
+import {checkDocumentExists, getCount, setFireBaseDoc} from '../../services/firebase/Calls';
 import dayjs from 'dayjs';
-import { getToken } from 'firebase/app-check';
-import { appCheck } from '../../services/firebase/AppCheck';
-import { callVerifyRecaptcha } from '../../services/firebase/httpsCallables/VerifyRecaptcha';
-import { AvailableType } from '../../utils/constants/Types';
+import {getToken} from 'firebase/app-check';
+import {appCheck} from '../../services/firebase/AppCheck';
+import {callVerifyRecaptcha} from '../../services/firebase/httpsCallables/VerifyRecaptcha';
+import {AvailableType} from '../../utils/constants/Types';
 
 interface Props {
     setSuccess: (value: boolean) => void,
@@ -27,19 +27,19 @@ interface Props {
 }
 
 export default function Submit({
-    setSuccess,
-    success,
-    uid,
-    day,
-    time,
-    firstName,
-    lastName,
-    email,
-    phoneNumber,
-    selections,
-    costData
-}: Props) {
-    const { enqueueSnackbar } = useSnackbar();
+                                   setSuccess,
+                                   success,
+                                   uid,
+                                   day,
+                                   time,
+                                   firstName,
+                                   lastName,
+                                   email,
+                                   phoneNumber,
+                                   selections,
+                                   costData
+                               }: Props) {
+    const {enqueueSnackbar} = useSnackbar();
     const [submitting, setSubmitting] = useState<boolean>(false);
 
     const totalQuantity = selections.reduce((a, b) => a + b.quantity, 0);
@@ -54,17 +54,23 @@ export default function Submit({
 
     const validateProps = () => {
         const errors = [
-            { condition: !firstName.trim(), message: 'Please add a First name' },
-            { condition: !email.trim(), message: 'Email is missing, please add a valid email' },
-            { condition: !phoneNumber.trim(), message: 'An invalid, incomplete, or no phone number was added' },
-            { condition: totalQuantity <= 0, message: 'Please select a quantity over 0' },
-            { condition: selectedTime.isBefore(minTime) || selectedTime.isAfter(maxTime), message: 'Selected time is outside the valid range of 4 AM to 10 AM.' },
-            { condition: dayjs(day).isBefore(minimumAllowedDate, 'day'), message: 'Order date must be at least 2 days from today.' }
+            {condition: !firstName.trim(), message: 'Please add a First name'},
+            {condition: !email.trim(), message: 'Email is missing, please add a valid email'},
+            {condition: !phoneNumber.trim(), message: 'An invalid, incomplete, or no phone number was added'},
+            {condition: totalQuantity <= 0, message: 'Please select a quantity over 0'},
+            {
+                condition: selectedTime.isBefore(minTime) || selectedTime.isAfter(maxTime),
+                message: 'Selected time is outside the valid range of 4 AM to 10 AM.'
+            },
+            {
+                condition: dayjs(day).isBefore(minimumAllowedDate, 'day'),
+                message: 'Order date must be at least 2 days from today.'
+            }
         ];
 
         for (const error of errors) {
             if (error.condition) {
-                enqueueSnackbar(error.message, { variant: 'error' });
+                enqueueSnackbar(error.message, {variant: 'error'});
                 return;
             }
         }
@@ -81,7 +87,7 @@ export default function Submit({
             const userProfileData = {
                 collectionName: 'customers',
                 docId: uid,
-                props: { uid, phoneNumber, firstName, lastName, email }
+                props: {uid, phoneNumber, firstName, lastName, email}
             };
 
             if (!exists) setFireBaseDoc(userProfileData);
@@ -95,14 +101,14 @@ export default function Submit({
         try {
             const token = (await getToken(appCheck, true)).token;
             if (!token) {
-                enqueueSnackbar('Failed to validate reCAPTCHA', { variant: 'error' });
+                enqueueSnackbar('Failed to validate reCAPTCHA', {variant: 'error'});
                 setSubmitting(false);
                 return;
             }
 
             const responseSuccess = await callVerifyRecaptcha(token);
             if (!responseSuccess) {
-                enqueueSnackbar('reCAPTCHA validation failed', { variant: 'error' });
+                enqueueSnackbar('reCAPTCHA validation failed', {variant: 'error'});
                 setSubmitting(false);
                 return;
             }
@@ -123,32 +129,32 @@ export default function Submit({
                     email,
                     costData,
                     totalQuantity,
-                    selections: selections.map(({ quantity, value, cost }) => ({ quantity, value, cost })),
+                    selections: selections.map(({quantity, value, cost}) => ({quantity, value, cost})),
                 },
                 collectionName: 'orders'
             });
 
-            enqueueSnackbar('Ordered', { variant: 'success' });
+            enqueueSnackbar('Ordered', {variant: 'success'});
             setSuccess(true);
         } catch (error) {
-            enqueueSnackbar('Failed to place order', { variant: 'error' });
+            enqueueSnackbar('Failed to place order', {variant: 'error'});
         } finally {
             setSubmitting(false);
         }
     };
 
     return (
-        <Box sx={{ width: '100%', textAlign: 'center' }}>
+        <Box sx={{width: '100%', textAlign: 'center'}}>
             <Typography>Ordering is Temporarily Closed</Typography>
             <Button
                 variant="contained"
                 onClick={validateProps}
-                disabled={true}>
-                {/* disabled={success || submitting}> */}
+                // disabled={true}>
+                disabled={success || submitting}>
 
                 {submitting ? (
-                    <Box sx={{ width: '100%' }}>
-                        <LinearProgress />
+                    <Box sx={{width: '100%'}}>
+                        <LinearProgress/>
                     </Box>
                 ) : success ? 'Thank you for your order!' : 'Place Order'}
             </Button>
