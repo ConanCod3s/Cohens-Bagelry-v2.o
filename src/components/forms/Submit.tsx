@@ -145,7 +145,6 @@ export default function Submit({
 
     return (
         <Box sx={{width: '100%', textAlign: 'center'}}>
-            <Typography>Ordering is Temporarily Closed</Typography>
             <Button
                 variant="contained"
                 onClick={validateProps}
