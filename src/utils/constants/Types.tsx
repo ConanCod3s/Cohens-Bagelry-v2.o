@@ -1,4 +1,13 @@
-import { ReactNode } from "react";
+import {ReactNode} from "react";
+import {Timestamp} from "firebase/firestore";
+
+// Review types
+type ReviewType = {
+    name: string;
+    review: string;
+    rating: number;
+    createdAt: Timestamp;
+};
 
 // User-related types
 type UserInfoType = {
@@ -59,6 +68,7 @@ type RouteConfig = {
 
 export type {
     AvailableType,
+    ReviewType,
     RouteConfig,
     UserInfoType,
     UserContextType,
