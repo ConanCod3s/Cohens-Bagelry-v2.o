@@ -3,7 +3,6 @@ import {Timestamp} from "firebase/firestore";
 
 // Review types
 type ReviewType = {
-    id: string;
     name: string;
     review: string;
     rating: number;

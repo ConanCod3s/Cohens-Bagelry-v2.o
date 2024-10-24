@@ -28,7 +28,7 @@ export default function Reviews() {
             try {
                 const reviewsData = await getCollection("reviews");
 
-                const sortedReviews = reviewsData.sort(
+                const sortedReviews: ReviewType[] = reviewsData.sort(
                     (a, b) => b.createdAt.seconds - a.createdAt.seconds
                 );
 
@@ -93,9 +93,9 @@ export default function Reviews() {
                         </Typography>
                     ) : (
                         <Box>
-                            {reviews.map(({id, name, review, rating, createdAt}) => (
+                            {reviews.map(({name, review, rating, createdAt}: ReviewType, sakuin: number) => (
                                 <Paper
-                                    key={id}
+                                    key={sakuin}
                                     elevation={2}
                                     sx={{
                                         p: 2,
@@ -133,7 +133,8 @@ export default function Reviews() {
                         alignSelf: "start",
                     }}
                 >
-                    <ReviewForm/>
+                    <ReviewForm reviews={reviews} setReviews={setReviews}/>
+
                 </Box>
             </Box>
         </Container>

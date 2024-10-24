@@ -11,9 +11,16 @@ import {
     Typography,
     Alert,
 } from "@mui/material";
-import {useUser} from "../../services/providers/User.tsx";
+import {useUser} from "../../services/providers/User";
+import {ReviewType} from "../../utils/constants/Types";
+import {Dispatch, SetStateAction} from "react";
 
-const ReviewForm: React.FC = () => {
+interface ReviewFormProps {
+    reviews: ReviewType[];
+    setReviews: Dispatch<SetStateAction<ReviewType[]>>;
+}
+
+const ReviewForm: React.FC<ReviewFormProps> = ({reviews, setReviews}) => {
     const {loggedIn} = useUser();
     const [name, setName] = useState<string>("");
     const [review, setReview] = useState<string>("");
@@ -23,31 +30,37 @@ const ReviewForm: React.FC = () => {
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
+
         if (!name.trim() || !review.trim()) {
             setError("Please fill out all fields.");
             return;
         }
+
         setIsSubmitting(true);
 
         try {
+            const newReview: ReviewType = {
+                name: name,
+                review: review,
+                rating: rating,
+                createdAt: Timestamp.fromDate(new Date()),
+            };
+
             await setFireBaseDoc({
                 collectionName: "reviews",
-                props: {
-                    name,
-                    review,
-                    rating,
-                    createdAt: Timestamp.fromDate(new Date()),
-                },
+                props: newReview,
             });
 
-            // Reset form after successful submission
+            setReviews([newReview, ...reviews]);
+
+            // Reset form fields after submission
             setName("");
             setReview("");
             setRating(5);
             setError(null);
         } catch (err) {
+            console.error("Error submitting review:", err);
             setError("Failed to submit review. Please try again.");
-            console.error("Error adding document: ", err);
         } finally {
             setIsSubmitting(false);
         }
@@ -55,12 +68,13 @@ const ReviewForm: React.FC = () => {
 
     return (
         <Container maxWidth="sm">
-            <Box sx={{mt: 4, textAlign: "center", width: '100%'}}>
+            <Box sx={{mt: 4, textAlign: "center", width: "100%"}}>
                 {loggedIn ? (
                     <Fragment>
                         <Typography variant="h4" gutterBottom>
                             Leave a Review
                         </Typography>
+
                         {error && (
                             <Alert severity="error" sx={{mb: 2}}>
                                 {error}
@@ -90,7 +104,14 @@ const ReviewForm: React.FC = () => {
                                 required
                             />
 
-                            <Box sx={{my: 2, display: 'flex', alignItems: 'center', justifyContent: 'space-between'}}>
+                            <Box
+                                sx={{
+                                    my: 2,
+                                    display: "flex",
+                                    alignItems: "center",
+                                    justifyContent: "space-between",
+                                }}
+                            >
                                 <Typography component="legend">Rating</Typography>
                                 <Rating
                                     name="simple-controlled"
@@ -116,11 +137,12 @@ const ReviewForm: React.FC = () => {
                             </Button>
                         </form>
                     </Fragment>
-                ) : (<Typography>Please log in to leave a review</Typography>)}
+                ) : (
+                    <Typography>Please log in to leave a review</Typography>
+                )}
             </Box>
         </Container>
-    )
-        ;
+    );
 };
 
 export default ReviewForm;
