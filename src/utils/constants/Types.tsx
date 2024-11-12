@@ -1,77 +1,77 @@
 import {ReactNode} from "react";
 import {Timestamp} from "firebase/firestore";
 
-// Review types
+// Review-related types
 type ReviewType = {
-    name: string;
-    review: string;
-    rating: number;
     createdAt: Timestamp;
+    name: string;
+    rating: number;
+    review: string;
 };
 
 // User-related types
-type UserInfoType = {
-    uid: string | null;
-    displayName: string | null;
-    firstName?: string | null;
-    lastName?: string | null;
-    email?: string | null;
-    phoneNumber?: string | null;
-}
-
 type UserContextType = {
     loggedIn: boolean;
     userInfo: UserInfoType | null;
-}
+};
+
+type UserInfoType = {
+    displayName: string | null;
+    email?: string | null;
+    firstName?: string | null;
+    lastName?: string | null;
+    phoneNumber?: string | null;
+    uid: string | null;
+};
 
 type UserProviderType = {
     children: ReactNode;
-}
+};
 
 // Order-related types
 type AvailableType = {
+    cost: number;
+    label: string;
     maxQuantity: number;
+    quantity: number;
     type: string;
     value: string;
-    label: string;
-    quantity: number;
-    cost: number;
     weight: number;
-}
+};
 
 type OrderType = {
-    orderedByUid: string;
-    orderStatus: 'Pending' | 'Confirmed' | 'Declined';
-    totalQuantity: number;
     costData: {
         cost: number;
         fee: number;
         totalCost: number;
     };
-    orderId: string;
+    day: string;
     firstName: string;
     lastName: string;
+    orderId: string;
+    orderStatus: "Pending" | "Confirmed" | "Declined";
+    orderedByUid: string;
     phoneNumber: string;
-    day: string;
-    time: string;
     selections: AvailableType[];
-}
+    time: string;
+    totalQuantity: number;
+};
 
 // Routing-related types
 type RouteConfig = {
-    path: string;
-    element: JSX.Element;
-    showOnlyOnMenu: boolean;
     children?: RouteConfig[];
+    element: JSX.Element;
     errorElement?: JSX.Element;
-}
+    path: string;
+    showOnlyOnMenu: boolean;
+};
 
 export type {
     AvailableType,
+    OrderType,
     ReviewType,
     RouteConfig,
-    UserInfoType,
     UserContextType,
+    UserInfoType,
     UserProviderType,
-    OrderType
 };

@@ -13,14 +13,8 @@ import {
 } from "@mui/material";
 import {useUser} from "../../services/providers/User";
 import {ReviewType} from "../../utils/constants/Types";
-import {Dispatch, SetStateAction} from "react";
 
-interface ReviewFormProps {
-    reviews: ReviewType[];
-    setReviews: Dispatch<SetStateAction<ReviewType[]>>;
-}
-
-const ReviewForm: React.FC<ReviewFormProps> = ({reviews, setReviews}) => {
+const ReviewForm: React.FC = () => {
     const {loggedIn} = useUser();
     const [name, setName] = useState<string>("");
     const [review, setReview] = useState<string>("");
@@ -40,9 +34,9 @@ const ReviewForm: React.FC<ReviewFormProps> = ({reviews, setReviews}) => {
 
         try {
             const newReview: ReviewType = {
-                name: name,
-                review: review,
-                rating: rating,
+                name,
+                review,
+                rating,
                 createdAt: Timestamp.fromDate(new Date()),
             };
 
@@ -51,9 +45,6 @@ const ReviewForm: React.FC<ReviewFormProps> = ({reviews, setReviews}) => {
                 props: newReview,
             });
 
-            setReviews([newReview, ...reviews]);
-
-            // Reset form fields after submission
             setName("");
             setReview("");
             setRating(5);
@@ -68,7 +59,7 @@ const ReviewForm: React.FC<ReviewFormProps> = ({reviews, setReviews}) => {
 
     return (
         <Container maxWidth="sm">
-            <Box sx={{mt: 4, textAlign: "center", width: "100%"}}>
+            <Box sx={{mt: 4, textAlign: "center"}}>
                 {loggedIn ? (
                     <Fragment>
                         <Typography variant="h4" gutterBottom>
@@ -104,21 +95,12 @@ const ReviewForm: React.FC<ReviewFormProps> = ({reviews, setReviews}) => {
                                 required
                             />
 
-                            <Box
-                                sx={{
-                                    my: 2,
-                                    display: "flex",
-                                    alignItems: "center",
-                                    justifyContent: "space-between",
-                                }}
-                            >
+                            <Box sx={{my: 2, display: "flex", alignItems: "center", justifyContent: "space-between"}}>
                                 <Typography component="legend">Rating</Typography>
                                 <Rating
-                                    name="simple-controlled"
+                                    name="rating"
                                     value={rating}
-                                    onChange={(_, newValue) => {
-                                        if (newValue) setRating(newValue);
-                                    }}
+                                    onChange={(_, newValue) => newValue && setRating(newValue)}
                                 />
                             </Box>
 
@@ -128,9 +110,7 @@ const ReviewForm: React.FC<ReviewFormProps> = ({reviews, setReviews}) => {
                                 color="primary"
                                 fullWidth
                                 disabled={isSubmitting}
-                                startIcon={
-                                    isSubmitting ? <CircularProgress size={20}/> : null
-                                }
+                                startIcon={isSubmitting ? <CircularProgress size={20}/> : null}
                                 sx={{mt: 2}}
                             >
                                 {isSubmitting ? "Submitting..." : "Submit Review"}
