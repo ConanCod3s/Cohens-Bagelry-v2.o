@@ -56,7 +56,7 @@ export default function About() {
             <Divider/>
             <br/>
             <Typography variant="h6">
-                Welcome to Cohen's Bagelry, where every bagel taste like home.
+                Welcome to Cohen's Bagelry, where every bagel tastes like home.
             </Typography>
             <Box sx={{height: 25, width: '100%'}}/>
         </Box>
