@@ -60,7 +60,7 @@ export default function Submit({
             {condition: totalQuantity <= 0, message: 'Please select a quantity over 0'},
             {
                 condition: selectedTime.isBefore(minTime) || selectedTime.isAfter(maxTime),
-                message: 'Selected time is outside the valid range of 4 AM to 10 AM.'
+                message: 'Selected time is outside the valid range of 5 AM to 10 AM.'
             },
             {
                 condition: dayjs(day).isBefore(minimumAllowedDate, 'day'),

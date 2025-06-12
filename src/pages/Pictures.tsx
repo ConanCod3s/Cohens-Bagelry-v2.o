@@ -23,7 +23,7 @@ export default function Pictures() {
         };
 
         fetchImages();
-    }, [images.length]);
+    }, []);
 
     const handleImageClick = (image: string) => setSelectedImage(image);
 
