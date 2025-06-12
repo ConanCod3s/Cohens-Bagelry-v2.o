@@ -1,22 +1,11 @@
 import {useEffect, useState} from "react";
 import {getCollection} from "../services/firebase/Calls";
 import {ReviewType} from "../utils/constants/Types";
-import {
-    Box,
-    CircularProgress,
-    Container,
-    Paper,
-    Typography,
-    Alert,
-    Divider,
-    Rating,
-    useMediaQuery,
-    useTheme,
-} from "@mui/material";
+import {Alert, Box, Container, Divider, Paper, Rating, Typography, useMediaQuery, useTheme,} from "@mui/material";
 
 export default function Reviews() {
     const [reviews, setReviews] = useState<ReviewType[]>([]);
-    const [loading, setLoading] = useState<boolean>(true);
+    // const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
 
     const theme = useTheme();
@@ -33,20 +22,20 @@ export default function Reviews() {
                 console.error("Error fetching reviews: ", err);
                 setError("Failed to load reviews. Please try again.");
             } finally {
-                setLoading(false);
+                // setLoading(false);
             }
         };
 
         fetchReviews();
     }, []);
 
-    if (loading) {
-        return (
-            <Box sx={{display: "flex", justifyContent: "center", mt: 4}}>
-                <CircularProgress/>
-            </Box>
-        );
-    }
+    // if (loading) {
+    //     return (
+    //         <Box sx={{display: "flex", justifyContent: "center", mt: 4}}>
+    //             <CircularProgress/>
+    //         </Box>
+    //     );
+    // }
 
     if (error) {
         return (

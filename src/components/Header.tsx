@@ -1,5 +1,5 @@
-import { useState, useEffect, Fragment } from 'react';
-import { useNavigate } from 'react-router-dom';
+import {useState, useEffect, Fragment} from 'react';
+import {useNavigate} from 'react-router-dom';
 import {
     AppBar,
     Box,
@@ -14,23 +14,29 @@ import {
 } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
-import { header } from '../theme/Base';
+import {header} from '../theme/Base';
 import getPages from '../router/GetPages';
 import LoginContainer from './LoginContainer';
-import { useUser } from '../services/providers/User';
-import { useSnackbar } from 'notistack';
+import {useUser} from '../services/providers/User';
+import {useSnackbar} from 'notistack';
+import{PageInfo} from "../utils/constants/Types.tsx";
+
+/**
+ * After taking a break for  8 Months I don't know what happen with this isAdmin thing, so im commenting out where it is for now
+ * and will have to re-visit it. I know what the plan was I just don't see where it was used anywhere else i.e. the types
+ */
 
 const Header = () => {
-    const { enqueueSnackbar } = useSnackbar();
-    const { userInfo } = useUser();
-    const pages = getPages();
+    const {enqueueSnackbar} = useSnackbar();
+    const {userInfo} = useUser();
+    const pages: PageInfo[] = getPages();
     const navigate = useNavigate();
     const [drawerOpen, setDrawerOpen] = useState(false);
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
     const [windowWidth, setWindowWidth] = useState(window.innerWidth);
 
-    const open = Boolean(anchorEl);
-    const id = open ? 'simple-popover' : undefined;
+    const open: boolean = Boolean(anchorEl);
+    const id: string | undefined = open ? 'simple-popover' : undefined;
 
     useEffect(() => {
         // Event listener for window resize
@@ -59,7 +65,7 @@ const Header = () => {
             } else {
                 enqueueSnackbar(
                     'There is an issue loading your history.',
-                    { variant: 'warning' }
+                    {variant: 'warning'}
                 );
                 return;
             }
@@ -69,25 +75,39 @@ const Header = () => {
         if (drawerOpen) setDrawerOpen(false);
     };
 
-    // Function to render navigation buttons
     const renderNavButtons = () => (
-        pages.map((page, sakuin) => {
+        pages.map((page: PageInfo, sakuin: number) => {
             if (page.path === '/' || page.showOnlyOnMenu) return null;
+            // if (page.path === '/admin' && !userInfo?.isAdmin) return null;
+
             return (
                 <Button
                     key={page.path + '' + sakuin}
                     onClick={() => handleNavigation(page.path)}
-                    sx={(theme) => ({ my: 2, color: theme.palette.primary.dark })}>
+                    sx={(theme) => ({my: 2, color: theme.palette.primary.dark})}
+                >
                     {page.path.replace('/', '')}
                 </Button>
             );
         })
     );
 
+    const sideMenuOptions = (
+        (<Fragment>
+            <Button onClick={() => handleNavigation('History')}>
+                Order History
+            </Button>
+            {/*{userInfo?.isAdmin && (*/}
+            {/*    <Button onClick={() => handleNavigation('Admin')}>*/}
+            {/*        Admin*/}
+            {/*    </Button>*/}
+            {/*)}*/}
+        </Fragment>)
+    )
     return (
-        <AppBar position='sticky' sx={{ height: header }}>
-            <Toolbar sx={{ justifyContent: 'space-between' }}>
-                <Button sx={{ color: 'white' }} onClick={() => navigate('/')}>
+        <AppBar position='sticky' sx={{height: header}}>
+            <Toolbar sx={{justifyContent: 'space-between'}}>
+                <Button sx={{color: 'white'}} onClick={() => navigate('/')}>
                     <Stack>
                         <Typography
                             variant='h6'
@@ -122,12 +142,12 @@ const Header = () => {
                 {/* Navigation and Profile Options */}
                 {windowWidth > 600 ? (
                     <Fragment>
-                        <Box sx={{ flexGrow: 1 }}>
+                        <Box sx={{flexGrow: 1}}>
                             {renderNavButtons()}
                         </Box>
                         <Box>
-                            <IconButton onClick={handlePopoverOpen} sx={{ alignContent: 'center' }}>
-                                <AccountCircleIcon />
+                            <IconButton onClick={handlePopoverOpen} sx={{alignContent: 'center'}}>
+                                <AccountCircleIcon/>
                             </IconButton>
                             <Popover
                                 id={id}
@@ -139,13 +159,9 @@ const Header = () => {
                                     horizontal: 'left',
                                 }}
                             >
-                                <Stack direction={'column'} spacing={1} sx={{ p: 2 }}>
-                                    {userInfo && (
-                                        <Button onClick={() => handleNavigation('History')}>
-                                            Order History
-                                        </Button>
-                                    )}
-                                    <LoginContainer />
+                                <Stack direction={'column'} spacing={1} sx={{p: 2}}>
+                                    {userInfo && (sideMenuOptions)}
+                                    <LoginContainer/>
                                 </Stack>
                             </Popover>
                         </Box>
@@ -155,10 +171,10 @@ const Header = () => {
                         edge='start'
                         color='inherit'
                         aria-label='menu'
-                        sx={{ display: { xs: 'flex', md: 'none' } }}
+                        sx={{display: {xs: 'flex', md: 'none'}}}
                         onClick={() => handleDrawerToggle(true)}
                     >
-                        <MenuIcon />
+                        <MenuIcon/>
                     </IconButton>
                 )}
             </Toolbar>
@@ -168,21 +184,18 @@ const Header = () => {
                 anchor='right'
                 open={drawerOpen}
                 onClose={() => handleDrawerToggle(false)}
-                sx={{ '& .MuiDrawer-paper': { width: '250px', padding: 2 } }}>
+                sx={{'& .MuiDrawer-paper': {width: '250px', padding: 2}}}
+            >
                 <Grid container direction='column' justifyContent='space-between' height='100%'>
-                    <Grid item >
+                    <Grid item>
                         <Stack>
                             {renderNavButtons()}
                         </Stack>
                     </Grid>
                     <Grid item>
-                        <Stack direction='column' spacing={1} sx={{ p: 2 }}>
-                            {userInfo && (
-                                <Button onClick={() => handleNavigation('History')}>
-                                    Order History
-                                </Button>
-                            )}
-                            <LoginContainer />
+                        <Stack direction='column' spacing={1} sx={{p: 2}}>
+                            {userInfo && (sideMenuOptions)}
+                            <LoginContainer/>
                         </Stack>
                     </Grid>
                 </Grid>

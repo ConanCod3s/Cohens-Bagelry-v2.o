@@ -57,6 +57,11 @@ type OrderType = {
     totalQuantity: number;
 };
 
+type PageInfo = {
+    path: string;
+    showOnlyOnMenu: boolean;
+};
+
 // Routing-related types
 type RouteConfig = {
     children?: RouteConfig[];
@@ -69,6 +74,7 @@ type RouteConfig = {
 export type {
     AvailableType,
     OrderType,
+    PageInfo,
     ReviewType,
     RouteConfig,
     UserContextType,
