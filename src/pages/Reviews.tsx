@@ -16,7 +16,7 @@ import {
 
 export default function Reviews() {
     const [reviews, setReviews] = useState<ReviewType[]>([]);
-    const [loading, setLoading] = useState<boolean>(true);
+    const [isLoading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
 
     const theme = useTheme();
@@ -40,14 +40,6 @@ export default function Reviews() {
         fetchReviews();
     }, []);
 
-    if (loading) {
-        return (
-            <Box sx={{display: "flex", justifyContent: "center", mt: 4}}>
-                <CircularProgress/>
-            </Box>
-        );
-    }
-
     if (error) {
         return (
             <Container maxWidth="sm" sx={{mt: 4}}>
@@ -65,28 +57,34 @@ export default function Reviews() {
                     overflowY: isMobile ? "visible" : "auto",
                     pr: isMobile ? 0 : 2
                 }}>
-                    <Typography variant="h4" sx={{mb: 2, textAlign: "center"}}>Customer Reviews</Typography>
+                    <Typography variant="h4" sx={{mb: 2, textAlign: "center"}}>Reviews</Typography>
                     <Divider sx={{mb: 2}}/>
 
-                    {reviews.length === 0 ? (
-                        <Typography variant="body1" sx={{textAlign: "center", mt: 2}}>
-                            No reviews yet. Be the first to leave a review!
-                        </Typography>
-                    ) : (
-                        reviews.map(({name, review, rating, createdAt}, sakuin: number) => (
-                            <Paper
-                                key={sakuin}
-                                elevation={2}
-                                sx={{p: 2, mb: 2, borderRadius: 2, backgroundColor: "#f9f9f9"}}
-                            >
-                                <Typography variant="h6">{name}</Typography>
-                                <Typography variant="body2" sx={{my: 1}}>{review}</Typography>
-                                <Rating value={rating} readOnly/>
-                                <Typography variant="caption" sx={{display: "block", mt: 1, color: "gray"}}>
-                                    Posted on: {new Date(createdAt.seconds * 1000).toLocaleDateString()}
-                                </Typography>
-                            </Paper>
-                        ))
+                    {isLoading ?(
+                        <Box sx={{display: "flex", justifyContent: "center", mt: 4}}>
+                            <CircularProgress/>
+                        </Box>
+                    ):(
+                        reviews.length === 0 ? (
+                            <Typography variant="body1" sx={{textAlign: "center", mt: 2}}>
+                                No reviews yet. Be the first to leave a review!
+                            </Typography>
+                        ) : (
+                            reviews.map(({name, review, rating, createdAt}, sakuin: number) => (
+                                <Paper
+                                    key={sakuin}
+                                    elevation={2}
+                                    sx={{p: 2, mb: 2, borderRadius: 2, backgroundColor: "#f9f9f9"}}
+                                >
+                                    <Typography variant="h6">{name}</Typography>
+                                    <Typography variant="body2" sx={{my: 1}}>{review}</Typography>
+                                    <Rating value={rating} readOnly/>
+                                    <Typography variant="caption" sx={{display: "block", mt: 1, color: "gray"}}>
+                                        Posted on: {new Date(createdAt.seconds * 1000).toLocaleDateString()}
+                                    </Typography>
+                                </Paper>
+                            ))
+                        )
                     )}
                 </Box>
             </Box>

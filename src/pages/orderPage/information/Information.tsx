@@ -1,3 +1,5 @@
+import {Typography} from "@mui/material";
+
 export default function Information() {
 
     const additionalInformation: string[] = [
@@ -17,6 +19,13 @@ export default function Information() {
                     <li key={sakuin}>{item}</li>
                 ))}
             </ul>
+            <Typography
+                variant="subtitle2"
+                sx={{textAlign: 'center', opacity:'.5'}}>
+                This site is protected by reCAPTCHA and the Google <br/>
+                <a href={"https://policies.google.com/privacy"}> Privacy Policy</a> and <a href={'https://policies.google.com/terms'}>Terms of Service</a> apply.
+            </Typography>
+
         </div>
     );
 }

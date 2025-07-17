@@ -148,7 +148,6 @@ export default function Submit({
             <Button
                 variant="contained"
                 onClick={validateProps}
-                // disabled={true}>
                 disabled={success || submitting}>
 
                 {submitting ? (
@@ -157,6 +156,6 @@ export default function Submit({
                     </Box>
                 ) : success ? 'Thank you for your order!' : 'Place Order'}
             </Button>
-        </Box>
+    </Box>
     );
 }
