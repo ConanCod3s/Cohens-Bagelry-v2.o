@@ -1,14 +1,14 @@
-import { useState } from 'react';
-import { createUserWithEmailAndPassword } from "firebase/auth";
-import { Button, Stack, TextField } from '@mui/material';
-import { useSnackbar } from 'notistack';
-import { auth, emailVerification, setFireBaseDoc } from '../../services/firebase/Calls';
+import {useState} from 'react';
+import {createUserWithEmailAndPassword} from "firebase/auth";
+import {Button, Stack, TextField} from '@mui/material';
+import {useSnackbar} from 'notistack';
+import {auth, emailVerification, setFireBaseDoc} from '../../services/firebase/Calls';
 import PhoneNumber from '../forms/PhoneNumber';
 import Email from '../forms/Email';
 import PasswordForm from '../forms/Password';
 
 export default function SignUpWithEmail() {
-    const { enqueueSnackbar } = useSnackbar();
+    const {enqueueSnackbar} = useSnackbar();
     const [password, setPassword] = useState('');
     const [email, setEmail] = useState<string>('');
     const [lastName, setLastName] = useState<string>('');
@@ -24,7 +24,7 @@ export default function SignUpWithEmail() {
 
     const handleSignUp = async () => {
         if (!isFormValid()) {
-            enqueueSnackbar('Please fix errors and fill in all required fields.', { variant: 'warning' });
+            enqueueSnackbar('Please fix errors and fill in all required fields.', {variant: 'warning'});
             return;
         }
 
@@ -47,16 +47,16 @@ export default function SignUpWithEmail() {
                     }
                 });
 
-                enqueueSnackbar('Account Created!', { variant: 'success' });
-                enqueueSnackbar('Verification email has been sent!', { variant: 'success' });
+                enqueueSnackbar('Account Created!', {variant: 'success'});
+                enqueueSnackbar('Verification email has been sent!', {variant: 'success'});
             } else {
                 enqueueSnackbar(
                     `Verification email failed to send. Please recheck your email or contact us at contact@cohensbagelry.com for help.`,
-                    { variant: 'error' }
+                    {variant: 'error'}
                 );
             }
         } catch (error: any) {
-            enqueueSnackbar(`Sign up failed: ${error.message}`, { variant: 'error' });
+            enqueueSnackbar(`Sign up failed: ${error.message}`, {variant: 'error'});
         }
     };
 
@@ -74,8 +74,8 @@ export default function SignUpWithEmail() {
                 onChange={(event) => setLastName(event.target.value)}
                 value={lastName}
             />
-            <PhoneNumber setPhoneNumber={setPhoneNumber} />
-            <Email setEmail={setEmail} />
+            <PhoneNumber setPhoneNumber={setPhoneNumber}/>
+            <Email setEmail={setEmail}/>
             <PasswordForm
                 password={password}
                 setPassword={setPassword}
@@ -86,7 +86,7 @@ export default function SignUpWithEmail() {
                 onClick={handleSignUp}
                 variant="contained"
                 disabled={!isFormValid()}
-                sx={{ borderRadius: 2 }}
+                sx={{borderRadius: 2}}
             >
                 Submit
             </Button>

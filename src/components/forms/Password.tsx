@@ -1,5 +1,5 @@
-import { useState } from 'react';
-import { FormControl, FormHelperText, IconButton, InputAdornment, InputLabel, OutlinedInput } from '@mui/material';
+import {useState} from 'react';
+import {FormControl, FormHelperText, IconButton, InputAdornment, InputLabel, OutlinedInput} from '@mui/material';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 
@@ -24,7 +24,7 @@ const validatePassword = (password: string) => {
     return errors;
 };
 
-export default function PasswordForm({ password, setPassword, errors, setErrors }: PasswordFormProps) {
+export default function PasswordForm({password, setPassword, errors, setErrors}: PasswordFormProps) {
     const [showPassword, setShowPassword] = useState(false);
 
     const handleClickShowPassword = () => setShowPassword((show) => !show);
@@ -56,7 +56,7 @@ export default function PasswordForm({ password, setPassword, errors, setErrors 
                             onMouseDown={handleMouseDownPassword}
                             edge="end"
                         >
-                            {showPassword ? <VisibilityOffIcon /> : <VisibilityIcon />}
+                            {showPassword ? <VisibilityOffIcon/> : <VisibilityIcon/>}
                         </IconButton>
                     </InputAdornment>
                 }
