@@ -65,7 +65,6 @@ export default function OrderHistory() {
         );
     }
 
-    console.log("OrderHistory", orders);
     return (
         <Box sx={{padding: 2}}>
             <Grid container spacing={2}>
