@@ -1,10 +1,10 @@
-import { Stack, TextField } from '@mui/material';
+import {Stack, TextField} from '@mui/material';
 import PhoneNumber from '../../../components/forms/PhoneNumber';
 import Submit from '../../../components/forms/Submit';
 import Email from '../../../components/forms/Email';
 import DateTimeForPickup from '../../../components/forms/DateTime';
 import dayjs from 'dayjs';
-import { AvailableType } from '../../../utils/constants/Types';
+import {AvailableType} from '../../../utils/constants/Types';
 
 interface PaymentWindowProps {
     email: string;
@@ -31,24 +31,24 @@ interface PaymentWindowProps {
 }
 
 export default function PaymentWindow({
-    email,
-    setEmail,
-    firstName,
-    setFirstName,
-    lastName,
-    setLastName,
-    phoneNumber,
-    setPhoneNumber,
-    uid,
-    selections,
-    costData,
-    day,
-    setDay,
-    time,
-    setTime,
-    success,
-    setSuccess,
-}: PaymentWindowProps) {
+                                          email,
+                                          setEmail,
+                                          firstName,
+                                          setFirstName,
+                                          lastName,
+                                          setLastName,
+                                          phoneNumber,
+                                          setPhoneNumber,
+                                          uid,
+                                          selections,
+                                          costData,
+                                          day,
+                                          setDay,
+                                          time,
+                                          setTime,
+                                          success,
+                                          setSuccess,
+                                      }: PaymentWindowProps) {
 
     return (
         <Stack spacing={2} justifyContent="center">
@@ -64,9 +64,9 @@ export default function PaymentWindow({
                 value={lastName}
                 onChange={(event) => setLastName(event.target.value)}
             />
-            <PhoneNumber userPhoneNumber={phoneNumber} setPhoneNumber={setPhoneNumber} />
-            <Email userEmail={email} setEmail={setEmail} />
-            <DateTimeForPickup defaultValue={day} setDay={setDay} setTime={setTime} />
+            <PhoneNumber userPhoneNumber={phoneNumber} setPhoneNumber={setPhoneNumber}/>
+            <Email userEmail={email} setEmail={setEmail}/>
+            <DateTimeForPickup defaultValue={day} setDay={setDay} setTime={setTime}/>
             <Submit
                 setSuccess={setSuccess}
                 success={success}

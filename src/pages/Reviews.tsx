@@ -2,14 +2,14 @@ import {useEffect, useState} from "react";
 import {getCollection} from "../services/firebase/Calls";
 import {ReviewType} from "../utils/constants/Types";
 import {
+    Alert,
     Box,
     CircularProgress,
     Container,
-    Paper,
-    Typography,
-    Alert,
     Divider,
+    Paper,
     Rating,
+    Typography,
     useMediaQuery,
     useTheme,
 } from "@mui/material";

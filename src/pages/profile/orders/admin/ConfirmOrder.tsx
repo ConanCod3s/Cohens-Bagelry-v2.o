@@ -1,9 +1,9 @@
-import { useState } from "react";
-import { OrderType } from "../../../utils/constants/Types";
-import { FormControl, InputLabel, MenuItem, Select, SelectChangeEvent } from "@mui/material";
-import { setFireBaseDoc, getDocIdByField } from "../../../services/firebase/Calls";
+import {useState} from "react";
+import {OrderType} from "../../../../utils/constants/Types.tsx";
+import {FormControl, InputLabel, MenuItem, Select, SelectChangeEvent} from "@mui/material";
+import {getDocIdByField, setFireBaseDoc} from "../../../../services/firebase/Calls.tsx";
 
-export default function ConfirmOrder({ ...order }: OrderType) {
+export default function ConfirmOrder({...order}: OrderType) {
     const [status, setStatus] = useState<OrderType['orderStatus']>(order.orderStatus);
 
     const handleChange = async (event: SelectChangeEvent) => {
@@ -34,16 +34,17 @@ export default function ConfirmOrder({ ...order }: OrderType) {
     };
 
     return (
-        <FormControl sx={{ minWidth: 120 }} size="small">
+        <FormControl sx={{minWidth: 120}} size="small">
             <InputLabel>Status</InputLabel>
             <Select
                 value={status}
                 label="Status"
-                onChange={handleChange}>
+                onChange={handleChange}
+                variant={'standard'}>
                 <MenuItem value={'Pending'}>Pending</MenuItem>
                 <MenuItem value={'Confirmed'}>Confirmed</MenuItem>
                 <MenuItem value={'Declined'}>Declined</MenuItem>
             </Select>
         </FormControl>
     );
-};
+}

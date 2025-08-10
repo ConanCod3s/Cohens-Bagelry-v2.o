@@ -1,5 +1,4 @@
-import { httpsCallable } from 'firebase/functions';
-import { getFunctions } from 'firebase/functions';
+import {getFunctions, httpsCallable} from 'firebase/functions';
 
 const functions = getFunctions();
 const verifyRecaptcha = httpsCallable(functions, 'verifyRecaptcha');

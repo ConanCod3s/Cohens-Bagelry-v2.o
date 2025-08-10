@@ -1,8 +1,8 @@
-import { Masonry } from '@mui/lab';
-import {  useEffect, useState } from 'react';
-import { CardMedia, CircularProgress, IconButton, Dialog } from "@mui/material";
+import {Masonry} from '@mui/lab';
+import {useEffect, useState} from 'react';
+import {CardMedia, CircularProgress, Dialog, IconButton} from "@mui/material";
 import CloseIcon from '@mui/icons-material/Close';
-import { getAppImages } from '../services/firebase/Calls';
+import {getAppImages} from '../services/firebase/Calls';
 
 export default function Pictures() {
     const [isLoading, setLoading] = useState(true);

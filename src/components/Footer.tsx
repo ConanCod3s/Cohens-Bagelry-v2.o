@@ -1,15 +1,15 @@
-import { useNavigate } from "react-router-dom";
+import {useNavigate} from "react-router-dom";
 import IconButton from "@mui/material/IconButton";
-import { BottomNavigation, Tooltip } from "@mui/material";
-import { Home, LightMode, NightlightRound, Email } from "@mui/icons-material";
-import { footer } from "../theme/Base";
+import {BottomNavigation, Tooltip} from "@mui/material";
+import {Email, Home, LightMode, NightlightRound} from "@mui/icons-material";
+import {footer} from "../theme/Base";
 
 interface FooterProps {
     themeMode: boolean;
     swapThemeMode: (newMode: boolean) => void;
 }
 
-export default function Footer({ themeMode, swapThemeMode }: FooterProps) {
+export default function Footer({themeMode, swapThemeMode}: FooterProps) {
     const navigate = useNavigate();
 
     const handleEmailClick = () => {
@@ -28,19 +28,19 @@ export default function Footer({ themeMode, swapThemeMode }: FooterProps) {
         >
             <Tooltip title="Home">
                 <IconButton onClick={() => navigate("/")}>
-                    <Home />
+                    <Home/>
                 </IconButton>
             </Tooltip>
 
             <Tooltip title="Contact@cohensbagelry.com">
                 <IconButton onClick={handleEmailClick}>
-                    <Email />
+                    <Email/>
                 </IconButton>
             </Tooltip>
 
             <Tooltip title={themeMode ? "Dark Mode" : "Light Mode"}>
                 <IconButton onClick={() => swapThemeMode(!themeMode)}>
-                    {themeMode ? <NightlightRound /> : <LightMode />}
+                    {themeMode ? <NightlightRound/> : <LightMode/>}
                 </IconButton>
             </Tooltip>
         </BottomNavigation>
