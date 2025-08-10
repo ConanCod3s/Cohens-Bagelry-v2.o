@@ -1,6 +1,6 @@
-import { useState, ChangeEvent } from 'react';
+import {ChangeEvent, useState} from 'react';
 import TextField from '@mui/material/TextField';
-import { AvailableType } from '../../utils/constants/Types';
+import {AvailableType} from '../../utils/constants/Types';
 
 interface Error {
     key: string;
@@ -14,12 +14,12 @@ interface Props {
     type: AvailableType;
 }
 
-export default function Quantity({ availableTypes, setAvailableTypes, type, sakuin }: Props) {
+export default function Quantity({availableTypes, setAvailableTypes, type, sakuin}: Props) {
     const [error, setError] = useState<Error | null>(null);
 
     const updateAvailableTypes = (sakuin: number, newQuantity: number) => {
         const updatedTypes = availableTypes.map((prevType, i) =>
-            i === sakuin ? { ...prevType, quantity: newQuantity } : prevType
+            i === sakuin ? {...prevType, quantity: newQuantity} : prevType
         );
         setAvailableTypes(updatedTypes);
     };
@@ -29,7 +29,7 @@ export default function Quantity({ availableTypes, setAvailableTypes, type, saku
 
         // Handle NaN value from parseInt
         if (isNaN(value)) {
-            setError({ key: `${type.label}${sakuin}`, msg: 'Please enter a valid number' });
+            setError({key: `${type.label}${sakuin}`, msg: 'Please enter a valid number'});
             return;
         }
 
@@ -38,13 +38,13 @@ export default function Quantity({ availableTypes, setAvailableTypes, type, saku
             .reduce((a, b) => a + b.quantity, 0);
 
         if (type.type === 'sourdough' && value > 1) {
-            setError({ key: `${type.label}${sakuin}`, msg: 'You can only select 1 loaf of sourdough.' });
+            setError({key: `${type.label}${sakuin}`, msg: 'You can only select 1 loaf of sourdough.'});
             return;
         } else if (totalBagels - type.quantity + value > 12) {
-            setError({ key: `${type.label}${sakuin}`, msg: 'Maximum total bagels (excluding sourdough) is 12.' });
+            setError({key: `${type.label}${sakuin}`, msg: 'Maximum total bagels (excluding sourdough) is 12.'});
             return;
         } else if (value < 0) {
-            setError({ key: `${type.label}${sakuin}`, msg: 'Please select a number greater than or equal to 0' });
+            setError({key: `${type.label}${sakuin}`, msg: 'Please select a number greater than or equal to 0'});
             return;
         }
 
@@ -64,9 +64,9 @@ export default function Quantity({ availableTypes, setAvailableTypes, type, saku
             helperText={showError ? error?.msg : ''}
             error={showError}
             onChange={handleQuantityChange}
-            InputLabelProps={{ shrink: true }}
+            InputLabelProps={{shrink: true}}
             value={type.quantity}
-            sx={{ zIndex: 0 }}
+            sx={{zIndex: 0}}
         />
     );
 }

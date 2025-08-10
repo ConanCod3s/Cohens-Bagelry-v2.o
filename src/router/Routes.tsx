@@ -6,43 +6,43 @@ import OrderPage from "../pages/orderPage/OrderPage.tsx";
 import About from "../pages/About.tsx";
 import ReviewForm from "../components/forms/ReviewForm.tsx";
 import Reviews from "../pages/Reviews.tsx";
-import OrderHistory from "../pages/profile/OrderHistory.tsx";
+import OrderHistory from "../pages/profile/orders/OrderHistory.tsx";
 
 export const routes: RouteConfig[] = [
     {
         path: '/',
-        element: <App />,
+        element: <App/>,
         showOnlyOnMenu: false,
-        errorElement: <PageNotFound />,
+        errorElement: <PageNotFound/>,
         children: [
             {
                 path: '/',
-                element: <Home />,
+                element: <Home/>,
                 showOnlyOnMenu: false,
             },
             {
                 path: '/order',
-                element: <OrderPage />,
+                element: <OrderPage/>,
                 showOnlyOnMenu: false,
             },
             {
                 path: '/about',
-                element: <About />,
+                element: <About/>,
                 showOnlyOnMenu: false,
             },
             {
                 path: '/reviews',
                 element: (
                     <div>
-                        <ReviewForm />
-                        <Reviews />
+                        <ReviewForm/>
+                        <Reviews/>
                     </div>
                 ),
                 showOnlyOnMenu: false,
             },
             {
                 path: '/order/:uid/history',
-                element: <OrderHistory />,
+                element: <OrderHistory/>,
                 showOnlyOnMenu: true,
             },
         ],

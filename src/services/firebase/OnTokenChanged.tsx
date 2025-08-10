@@ -1,5 +1,5 @@
-import { appCheck } from "./AppCheck";
-import { onTokenChanged } from "firebase/app-check";
+import {appCheck} from "./AppCheck";
+import {onTokenChanged} from "firebase/app-check";
 
 export default onTokenChanged(appCheck, (token) => {
     if (token) {

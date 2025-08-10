@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import {useState} from 'react';
 import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
 import Avatar from '@mui/material/Avatar';
@@ -43,18 +43,18 @@ export default function SettingsMenu() {
     };
 
     return (
-        <Box sx={{ flexGrow: 0 }}>
+        <Box sx={{flexGrow: 0}}>
             <Tooltip title="Open settings">
-                <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                    <Avatar alt="User Avatar" src="/static/images/avatar/2.jpg" />
+                <IconButton onClick={handleOpenUserMenu} sx={{p: 0}}>
+                    <Avatar alt="User Avatar" src="/static/images/avatar/2.jpg"/>
                 </IconButton>
             </Tooltip>
             <Menu
-                sx={{ mt: '45px' }}
+                sx={{mt: '45px'}}
                 id="menu-appbar"
                 anchorEl={anchorElUser}
-                anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
-                transformOrigin={{ vertical: 'top', horizontal: 'right' }}
+                anchorOrigin={{vertical: 'top', horizontal: 'right'}}
+                transformOrigin={{vertical: 'top', horizontal: 'right'}}
                 keepMounted
                 open={Boolean(anchorElUser)}
                 onClose={handleCloseUserMenu}

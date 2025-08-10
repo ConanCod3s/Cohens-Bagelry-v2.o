@@ -1,15 +1,15 @@
-import { createContext, useContext, useState, useEffect } from 'react';
-import { auth, getDocumentById } from '../firebase/Calls';
-import { getRedirectResult, onAuthStateChanged } from 'firebase/auth';
-import { UserInfoType, UserContextType, UserProviderType } from '../../utils/constants/Types';
-import { useSnackbar } from 'notistack';
+import {createContext, useContext, useEffect, useState} from 'react';
+import {auth, getDocumentById} from '../firebase/Calls';
+import {getRedirectResult, onAuthStateChanged} from 'firebase/auth';
+import {UserContextType, UserInfoType, UserProviderType} from '../../utils/constants/Types';
+import {useSnackbar} from 'notistack';
 
 const UserContext = createContext<UserContextType | undefined>(undefined);
 
-export const UserProvider = ({ children }: UserProviderType) => {
+export const UserProvider = ({children}: UserProviderType) => {
     const [loggedIn, setLogin] = useState<boolean>(false);
     const [userInfo, setUserInfo] = useState<UserInfoType | null>(null);
-    const { enqueueSnackbar } = useSnackbar();
+    const {enqueueSnackbar} = useSnackbar();
 
     useEffect(() => {
         let unsubscribe: (() => void) | null = null;
@@ -31,7 +31,7 @@ export const UserProvider = ({ children }: UserProviderType) => {
                 }
             } catch (error) {
                 console.error('Error handling redirect:', error);
-                enqueueSnackbar('Authentication process failed. Please try logging in again.', { variant: 'error' });
+                enqueueSnackbar('Authentication process failed. Please try logging in again.', {variant: 'error'});
             } finally {
                 unsubscribe = onAuthStateChanged(auth, async (user) => {
                     if (user) {
@@ -43,7 +43,7 @@ export const UserProvider = ({ children }: UserProviderType) => {
                             setLogin(true);
                             setUserInfo(userData as UserInfoType);
                         } catch (error) {
-                            enqueueSnackbar('Error fetching user data.', { variant: 'error' });
+                            enqueueSnackbar('Error fetching user data.', {variant: 'error'});
                             setLogin(false);
                             setUserInfo(null);
                         }
@@ -63,7 +63,7 @@ export const UserProvider = ({ children }: UserProviderType) => {
     }, [enqueueSnackbar]);
 
     return (
-        <UserContext.Provider value={{ loggedIn, userInfo }}>
+        <UserContext.Provider value={{loggedIn, userInfo}}>
             {children}
         </UserContext.Provider>
     );

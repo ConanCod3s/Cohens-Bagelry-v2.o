@@ -1,5 +1,5 @@
-import { Box, Typography, Button } from '@mui/material';
-import { useNavigate } from "react-router-dom";
+import {Box, Button, Typography} from '@mui/material';
+import {useNavigate} from "react-router-dom";
 
 export default function PageNotFound() {
     const navigate = useNavigate();

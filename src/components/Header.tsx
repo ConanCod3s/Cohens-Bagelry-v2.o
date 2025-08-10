@@ -1,17 +1,6 @@
-import {useState, useEffect, Fragment} from 'react';
+import {Fragment, useEffect, useState} from 'react';
 import {useNavigate} from 'react-router-dom';
-import {
-    AppBar,
-    Box,
-    Toolbar,
-    Typography,
-    Button,
-    Drawer,
-    IconButton,
-    Popover,
-    Stack,
-    Grid
-} from '@mui/material';
+import {AppBar, Box, Button, Drawer, Grid, IconButton, Popover, Stack, Toolbar, Typography} from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import {header} from '../theme/Base';
@@ -19,24 +8,18 @@ import getPages from '../router/GetPages';
 import LoginContainer from './LoginContainer';
 import {useUser} from '../services/providers/User';
 import {useSnackbar} from 'notistack';
-import{PageInfo} from "../utils/constants/Types.tsx";
-
-/**
- * After taking a break for  8 Months I don't know what happen with this isAdmin thing, so im commenting out where it is for now
- * and will have to re-visit it. I know what the plan was I just don't see where it was used anywhere else i.e. the types
- */
 
 const Header = () => {
     const {enqueueSnackbar} = useSnackbar();
     const {userInfo} = useUser();
-    const pages: PageInfo[] = getPages();
+    const pages = getPages();
     const navigate = useNavigate();
     const [drawerOpen, setDrawerOpen] = useState(false);
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
     const [windowWidth, setWindowWidth] = useState(window.innerWidth);
 
-    const open: boolean = Boolean(anchorEl);
-    const id: string | undefined = open ? 'simple-popover' : undefined;
+    const open = Boolean(anchorEl);
+    const id = open ? 'simple-popover' : undefined;
 
     useEffect(() => {
         // Event listener for window resize
@@ -75,35 +58,21 @@ const Header = () => {
         if (drawerOpen) setDrawerOpen(false);
     };
 
+    // Function to render navigation buttons
     const renderNavButtons = () => (
-        pages.map((page: PageInfo, sakuin: number) => {
+        pages.map((page, sakuin) => {
             if (page.path === '/' || page.showOnlyOnMenu) return null;
-            // if (page.path === '/admin' && !userInfo?.isAdmin) return null;
-
             return (
                 <Button
                     key={page.path + '' + sakuin}
                     onClick={() => handleNavigation(page.path)}
-                    sx={(theme) => ({my: 2, color: theme.palette.primary.dark})}
-                >
+                    sx={(theme) => ({my: 2, color: theme.palette.primary.dark})}>
                     {page.path.replace('/', '')}
                 </Button>
             );
         })
     );
 
-    const sideMenuOptions = (
-        (<Fragment>
-            <Button onClick={() => handleNavigation('History')}>
-                Order History
-            </Button>
-            {/*{userInfo?.isAdmin && (*/}
-            {/*    <Button onClick={() => handleNavigation('Admin')}>*/}
-            {/*        Admin*/}
-            {/*    </Button>*/}
-            {/*)}*/}
-        </Fragment>)
-    )
     return (
         <AppBar position='sticky' sx={{height: header}}>
             <Toolbar sx={{justifyContent: 'space-between'}}>
@@ -160,7 +129,11 @@ const Header = () => {
                                 }}
                             >
                                 <Stack direction={'column'} spacing={1} sx={{p: 2}}>
-                                    {userInfo && (sideMenuOptions)}
+                                    {userInfo && (
+                                        <Button onClick={() => handleNavigation('History')}>
+                                            Order History
+                                        </Button>
+                                    )}
                                     <LoginContainer/>
                                 </Stack>
                             </Popover>
@@ -184,8 +157,7 @@ const Header = () => {
                 anchor='right'
                 open={drawerOpen}
                 onClose={() => handleDrawerToggle(false)}
-                sx={{'& .MuiDrawer-paper': {width: '250px', padding: 2}}}
-            >
+                sx={{'& .MuiDrawer-paper': {width: '250px', padding: 2}}}>
                 <Grid container direction='column' justifyContent='space-between' height='100%'>
                     <Grid item>
                         <Stack>
@@ -194,7 +166,11 @@ const Header = () => {
                     </Grid>
                     <Grid item>
                         <Stack direction='column' spacing={1} sx={{p: 2}}>
-                            {userInfo && (sideMenuOptions)}
+                            {userInfo && (
+                                <Button onClick={() => handleNavigation('History')}>
+                                    Order History
+                                </Button>
+                            )}
                             <LoginContainer/>
                         </Stack>
                     </Grid>
