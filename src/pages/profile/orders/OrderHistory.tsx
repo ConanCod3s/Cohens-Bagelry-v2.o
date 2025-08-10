@@ -21,8 +21,7 @@ export default function OrderHistory() {
             if (loggedIn && userInfo) {
                 try {
                     setLoading(true);
-
-                    const adminStatus = await callCheckIfAdmin(userInfo.uid);
+                    const adminStatus = await callCheckIfAdmin((userInfo.uid as string));
                     setIsAdmin(adminStatus as boolean);
 
                     const ordersData: OrderType[] = await getCollection('orders');
@@ -66,7 +65,6 @@ export default function OrderHistory() {
         );
     }
 
-    console.log("ORderHistory", orders);
     return (
         <Box sx={{padding: 2}}>
             <Grid container spacing={2}>
