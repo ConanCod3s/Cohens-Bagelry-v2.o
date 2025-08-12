@@ -8,4 +8,4 @@ export default function Contact() {
         <Box sx={{ alignContent: 'center' }}>
             <a href={`mailto:${orderEmail}`}>{orderEmail}</a>
         </Box>
-    );
+    )}
