@@ -1,18 +1,20 @@
-import { createContext, useContext, useState, useEffect } from 'react';
-import { auth, getDocumentById } from '../firebase/Calls';
-import { getRedirectResult, onAuthStateChanged } from 'firebase/auth';
-import { UserInfoType, UserContextType, UserProviderType } from '../../utils/constants/Types';
-import { useSnackbar } from 'notistack';
+import {createContext, useContext, useEffect, useState} from 'react';
+import {auth, getDocumentById} from '../firebase/Calls';
+import {getRedirectResult, onAuthStateChanged} from 'firebase/auth';
+import {UserContextType, UserInfoType, UserProviderType} from '../../utils/constants/Types';
+import {useSnackbar} from 'notistack';
 
 const UserContext = createContext<UserContextType | undefined>(undefined);
 
-export const UserProvider = ({ children }: UserProviderType) => {
+export const UserProvider = ({children}: UserProviderType) => {
     const [loggedIn, setLogin] = useState<boolean>(false);
     const [userInfo, setUserInfo] = useState<UserInfoType | null>(null);
-    const { enqueueSnackbar } = useSnackbar();
+    const {enqueueSnackbar} = useSnackbar();
 
     useEffect(() => {
-        const handleRedirect = async () => {
+        let unsubscribe: (() => void) | null = null;
+
+        const initAuth = async () => {
             try {
                 const result = await getRedirectResult(auth);
                 if (result) {
@@ -26,44 +28,42 @@ export const UserProvider = ({ children }: UserProviderType) => {
                         phoneNumber: user.phoneNumber,
                     });
                     setLogin(true);
-                } else {
-                    console.warn('No redirect result, possible state issue.');
                 }
             } catch (error) {
                 console.error('Error handling redirect:', error);
-                enqueueSnackbar('Authentication process failed. Please try logging in again.', { variant: 'error' });
-            }
-        };
-
-        handleRedirect().then(() => {
-            const unsubscribe = onAuthStateChanged(auth, async (user) => {
-                if (user) {
-                    try {
-                        const userData = await getDocumentById({
-                            collectionName: 'customers',
-                            docId: user.uid,
-                        });
-                        setLogin(true);
-                        setUserInfo(userData as UserInfoType);
-                    } catch (error) {
-                        enqueueSnackbar('Error fetching user data.', { variant: 'error' });
+                enqueueSnackbar('Authentication process failed. Please try logging in again.', {variant: 'error'});
+            } finally {
+                unsubscribe = onAuthStateChanged(auth, async (user) => {
+                    if (user) {
+                        try {
+                            const userData = await getDocumentById({
+                                collectionName: 'customers',
+                                docId: user.uid,
+                            });
+                            setLogin(true);
+                            setUserInfo(userData as UserInfoType);
+                        } catch (error) {
+                            enqueueSnackbar('Error fetching user data.', {variant: 'error'});
+                            setLogin(false);
+                            setUserInfo(null);
+                        }
+                    } else {
                         setLogin(false);
                         setUserInfo(null);
                     }
-                } else {
-                    setLogin(false);
-                    setUserInfo(null);
-                }
-            });
+                });
+            }
+        };
 
-            return () => unsubscribe();
-        }).catch((error) => {
-            console.error('Unexpected error during handleRedirect:', error);
-        });
+        initAuth();
+
+        return () => {
+            if (unsubscribe) unsubscribe();
+        };
     }, [enqueueSnackbar]);
 
     return (
-        <UserContext.Provider value={{ loggedIn, userInfo }}>
+        <UserContext.Provider value={{loggedIn, userInfo}}>
             {children}
         </UserContext.Provider>
     );

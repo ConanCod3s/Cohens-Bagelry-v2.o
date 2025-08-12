@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import {useState} from 'react';
 import TextField from '@mui/material/TextField';
 
 interface Props {
@@ -6,7 +6,7 @@ interface Props {
     setPhoneNumber: (number: string) => void;
 }
 
-export default function PhoneNumber({ userPhoneNumber, setPhoneNumber }: Props) {
+export default function PhoneNumber({userPhoneNumber, setPhoneNumber}: Props) {
     const [error, setError] = useState<{ key: string; msg: string } | null>(null);
 
     const validatePhoneNumber = (phoneNumber: string) => {
@@ -18,7 +18,7 @@ export default function PhoneNumber({ userPhoneNumber, setPhoneNumber }: Props) 
         const phoneNumber = event.target.value;
         if (!validatePhoneNumber(phoneNumber)) {
             setPhoneNumber('');
-            setError({ key: 'phone', msg: 'Please enter a valid phone number (e.g. 123-456-7890)' });
+            setError({key: 'phone', msg: 'Please enter a valid phone number (e.g. 123-456-7890)'});
         } else {
             setPhoneNumber(phoneNumber);
             setError(null);

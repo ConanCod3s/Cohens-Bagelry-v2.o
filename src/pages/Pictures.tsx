@@ -1,11 +1,11 @@
-import { Masonry } from '@mui/lab';
-import { Fragment, useEffect, useState } from 'react';
-import { CardMedia, CircularProgress, IconButton, Dialog } from "@mui/material";
+import {Masonry} from '@mui/lab';
+import {useEffect, useState} from 'react';
+import {CardMedia, CircularProgress, Dialog, IconButton} from "@mui/material";
 import CloseIcon from '@mui/icons-material/Close';
-import { getAppImages } from '../services/firebase/Calls';
+import {getAppImages} from '../services/firebase/Calls';
 
 export default function Pictures() {
-    const [isLoading, setLoading] = useState<boolean>(true);
+    const [isLoading, setLoading] = useState(true);
     const [images, setImages] = useState<string[]>([]);
     const [selectedImage, setSelectedImage] = useState<string | null>(null);
 
@@ -16,30 +16,24 @@ export default function Pictures() {
                 const fetchedImages = await getAppImages();
                 setImages(fetchedImages);
             } catch (error) {
-                console.error("Failed to fetch images:", error);
+                console.error('Failed to fetch images:', error);
             } finally {
                 setLoading(false);
             }
         };
 
-        if (images.length === 0) {
-            fetchImages();
-        }
-    }, [images.length]);
+        fetchImages();
+    }, []);
 
-    const handleImageClick = (image: string) => {
-        setSelectedImage(image);
-    };
+    const handleImageClick = (image: string) => setSelectedImage(image);
 
-    const handleClose = () => {
-        setSelectedImage(null);
-    };
+    const handleClose = () => setSelectedImage(null);
 
-    if (isLoading) return <CircularProgress sx={{ display: 'block', margin: 'auto' }} />;
+    if (isLoading) return <CircularProgress sx={{display: 'block', margin: 'auto'}}/>;
 
     return (
-        <Fragment>
-            <Masonry columns={{ xs: 1, sm: 2, md: 3 }} spacing={1}>
+        <>
+            <Masonry columns={{xs: 1, sm: 2, md: 3}} spacing={1}>
                 {images.map((image, index) => (
                     <CardMedia
                         key={index}
@@ -50,36 +44,32 @@ export default function Pictures() {
                             width: '100%',
                             height: 'auto',
                             objectFit: 'cover',
-                            cursor: 'pointer'
+                            cursor: 'pointer',
                         }}
                     />
                 ))}
             </Masonry>
 
-            {/* Modal to show the expanded image */}
             <Dialog
-                open={!!selectedImage}
+                open={Boolean(selectedImage)}
                 onClose={handleClose}
-                PaperProps={{
-                    style: { backgroundColor: 'transparent', boxShadow: 'none' }
-                }}
+                PaperProps={{style: {backgroundColor: 'transparent', boxShadow: 'none'}}}
                 maxWidth="lg"
             >
                 {selectedImage && (
-                    <div style={{ position: 'relative' }}>
+                    <div style={{position: 'relative'}}>
                         <IconButton
                             onClick={handleClose}
                             sx={{
                                 position: 'absolute',
-                                top: '10px',
-                                right: '10px',
+                                top: 10,
+                                right: 10,
                                 color: 'white',
                                 backgroundColor: 'rgba(0, 0, 0, 0.5)',
                             }}
                         >
-                            <CloseIcon />
+                            <CloseIcon/>
                         </IconButton>
-
                         <img
                             src={selectedImage}
                             alt="Expanded"
@@ -88,12 +78,12 @@ export default function Pictures() {
                                 maxHeight: '90vh',
                                 margin: 'auto',
                                 display: 'block',
-                                objectFit: 'contain'
+                                objectFit: 'contain',
                             }}
                         />
                     </div>
                 )}
             </Dialog>
-        </Fragment>
+        </>
     );
 }

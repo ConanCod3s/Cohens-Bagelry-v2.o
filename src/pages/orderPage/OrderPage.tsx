@@ -1,18 +1,18 @@
-import { useState, useEffect, Fragment } from 'react';
-import { Typography, Tabs, Tab, Grid, Divider } from '@mui/material';
+import {Fragment, useEffect, useState} from 'react';
+import {Divider, Grid, Tab, Tabs, Typography} from '@mui/material';
 import dayjs from 'dayjs';
-import { useUser } from '../../services/providers/User';
+import {useUser} from '../../services/providers/User';
 import LoginContainer from '../../components/LoginContainer';
-import { AvailableType } from '../../utils/constants/Types';
-import { bagels, sourdough } from '../../utils/constants/Constants';
+import {AvailableType} from '../../utils/constants/Types';
+import {bagels, sourdough} from '../../utils/constants/Constants';
 import Bagels from './typeTabs/bagels/Bagels';
 import Sourdough from './typeTabs/sourdough/Sourdough';
 import PaymentWindow from './paymentWindow/PaymentWindow';
 import Information from './information/Information';
-import { workingWindow } from '../../theme/Base';
+import {workingWindow} from '../../theme/Base';
 
 export default function OrderPage() {
-    const { userInfo, loggedIn } = useUser();
+    const {userInfo, loggedIn} = useUser();
 
     const [value, setValue] = useState<number>(1);
     const [success, setSuccess] = useState<boolean>(false);
@@ -56,13 +56,13 @@ export default function OrderPage() {
         <Fragment>
             <Grid container spacing={2} height={workingWindow}>
                 <Grid item xs={12} sm={12} md={8} lg={8}>
-                    <div style={{ minHeight: 650 }}>
+                    <div style={{minHeight: 650}}>
                         <Tabs
                             value={value}
                             onChange={handleChange}
                         >
-                            <Tab value={1} label="Bagels" />
-                            <Tab value={2} label="Sourdough" />
+                            <Tab value={1} label="Bagels"/>
+                            <Tab value={2} label="Sourdough"/>
                         </Tabs>
 
                         {value === 1 && (
@@ -79,7 +79,7 @@ export default function OrderPage() {
                             />
                         )}
                     </div>
-                    <Divider sx={{ paddingTop: 5 }} />
+                    <Divider sx={{paddingTop: 5}}/>
                     <Grid container>
                         <Grid item xs={8}>
                             <Typography>Cost:</Typography>
@@ -108,15 +108,17 @@ export default function OrderPage() {
                     </Grid>
                 </Grid>
 
-                <Grid container item xs={12} sm={12} md={4} lg={4} sx={{ display: 'grid', justifyContent: 'space-around' }}>
+                <Grid container item xs={12} sm={12} md={4} lg={4}
+                      sx={{display: 'grid', justifyContent: 'space-around'}}>
                     <Grid item>
                         {loggedIn ? (
 
                             success ? (
-                                <Typography sx={{ textAlign: 'center', paddingTop: 2, paddingBottom: 10 }}>
-                                    Once your order has been placed, please allow 24 hours for me to contact you to confirm.
-                                </Typography>
-                            ) :
+                                    <Typography sx={{textAlign: 'center', paddingTop: 2, paddingBottom: 10}}>
+                                        Once your order has been placed, please allow 24 hours for me to contact you to
+                                        confirm.
+                                    </Typography>
+                                ) :
                                 <PaymentWindow
                                     email={email}
                                     setEmail={setEmail}
@@ -137,10 +139,10 @@ export default function OrderPage() {
                                     setSuccess={setSuccess}
                                 />
                         ) : (
-                            <LoginContainer />
+                            <LoginContainer/>
                         )}
-                        <Grid item sx={{ height: '10em', width: '100%' }}>
-                            <Information />
+                        <Grid item sx={{height: '10em', width: '100%'}}>
+                            <Information/>
                         </Grid>
                     </Grid>
                 </Grid>

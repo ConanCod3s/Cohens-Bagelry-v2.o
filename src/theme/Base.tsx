@@ -1,4 +1,4 @@
-import { createTheme, ThemeOptions } from "@mui/material";
+import {createTheme, ThemeOptions} from "@mui/material";
 
 // Buffers for static components, all in vh
 export const header: number = 80;
@@ -72,4 +72,4 @@ const darkTheme = createTheme({
     },
 });
 
-export { lightTheme, darkTheme };
+export {lightTheme, darkTheme};

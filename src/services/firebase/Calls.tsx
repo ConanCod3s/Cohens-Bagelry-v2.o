@@ -1,8 +1,18 @@
 import "firebase/auth";
-import { app } from "./Config";
-import { getDownloadURL, getStorage, ref } from "firebase/storage";
-import { getAuth, sendEmailVerification, signOut } from "firebase/auth";
-import { getFirestore, collection, setDoc, doc, getDoc, getCountFromServer, getDocs, query, where } from "firebase/firestore";
+import {app} from "./Config";
+import {getDownloadURL, getStorage, ref} from "firebase/storage";
+import {getAuth, sendEmailVerification, signOut} from "firebase/auth";
+import {
+    collection,
+    doc,
+    getCountFromServer,
+    getDoc,
+    getDocs,
+    getFirestore,
+    query,
+    setDoc,
+    where
+} from "firebase/firestore";
 
 // Initialize Firebase services
 const auth = getAuth(app);
@@ -34,7 +44,20 @@ export const getAppImages = async (): Promise<string[]> => {
     }
 };
 
-// Sign out the current user
+export const handleDelete = async ({
+                                       orderId
+                                   }: {
+    orderId: string;
+}): Promise<void> => {
+    console.log('handleDelete', orderId);
+    try {
+        // await deleteDoc(doc(db, "orders", orderId));
+        console.log("Order deleted successfully");
+    } catch (error) {
+        console.error("Error deleting order: ", error);
+    }
+};
+
 export const signUserOut = async (): Promise<void> => {
     try {
         await signOut(auth);
@@ -44,9 +67,9 @@ export const signUserOut = async (): Promise<void> => {
 };
 
 export const checkDocumentExists = async ({
-    collectionName,
-    documentId,
-}: {
+                                              collectionName,
+                                              documentId,
+                                          }: {
     collectionName: string;
     documentId: string;
 }): Promise<boolean | null> => {
@@ -54,8 +77,7 @@ export const checkDocumentExists = async ({
         const docRef = doc(db, collectionName, documentId);
         const docSnap = await getDoc(docRef);
 
-        if (docSnap.exists()) return true
-        else return false;
+        return !!docSnap.exists();
 
     } catch (error) {
         console.error('Error checking document:', error);
@@ -63,12 +85,11 @@ export const checkDocumentExists = async ({
     }
 }
 
-// Function to get the document ID by a specific field and value
 export const getDocIdByField = async ({
-    collectionName,
-    fieldName,
-    value,
-}: {
+                                          collectionName,
+                                          fieldName,
+                                          value,
+                                      }: {
     collectionName: string;
     fieldName: string;
     value: any;
@@ -87,12 +108,11 @@ export const getDocIdByField = async ({
     }
 };
 
-// Set a document in Firestore
 export const setFireBaseDoc = async ({
-    collectionName,
-    docId,
-    props,
-}: {
+                                         collectionName,
+                                         docId,
+                                         props,
+                                     }: {
     collectionName: string;
     docId?: string;
     props: any;
@@ -100,21 +120,20 @@ export const setFireBaseDoc = async ({
     try {
         if (!docId) {
             const newRef = doc(collection(db, collectionName));
-            const data = collectionName === "customers" ? { uid: newRef.id, ...props } : props;
-            await setDoc(newRef, data, { merge: true });
+            const data = collectionName === "customers" ? {uid: newRef.id, ...props} : props;
+            await setDoc(newRef, data, {merge: true});
         } else {
-            await setDoc(doc(db, collectionName, docId), props, { merge: true });
+            await setDoc(doc(db, collectionName, docId), props, {merge: true});
         }
     } catch (error) {
         console.error(`Error setting document in ${collectionName} collection:`, error);
     }
 };
 
-// Get a document from Firestore by its ID
 export const getDocumentById = async ({
-    collectionName,
-    docId,
-}: {
+                                          collectionName,
+                                          docId,
+                                      }: {
     collectionName: string;
     docId: string;
 }): Promise<any> => {
@@ -128,7 +147,6 @@ export const getDocumentById = async ({
     }
 };
 
-// Get the count of documents in a Firestore collection
 export const getCount = async (collectionName: string): Promise<number> => {
     try {
         const countSnapshot = await getCountFromServer(collection(db, collectionName));
@@ -139,18 +157,16 @@ export const getCount = async (collectionName: string): Promise<number> => {
     }
 };
 
-// Retrieve all documents from a Firestore collection
 export const getCollection = async (collectionName: string): Promise<any[]> => {
     try {
         const snapshot = await getDocs(collection(db, collectionName));
-        return snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
+        return snapshot.docs.map((doc) => ({id: doc.id, ...doc.data()}));
     } catch (error) {
         console.error(`Error getting collection from ${collectionName} collection:`, error);
         return [];
     }
 };
 
-// Send email verification to the current user
 export const emailVerification = async (): Promise<boolean> => {
     const user = auth.currentUser;
 
@@ -168,4 +184,4 @@ export const emailVerification = async (): Promise<boolean> => {
     return false;
 };
 
-export { auth, db, storage };
+export {auth, db, storage};

@@ -1,6 +1,6 @@
-import { IconButton } from '@mui/material';
-import { GoogleAuthProvider, signInWithRedirect } from 'firebase/auth';
-import { auth } from '../../services/firebase/Calls';
+import {IconButton} from '@mui/material';
+import {GoogleAuthProvider, signInWithRedirect} from 'firebase/auth';
+import {auth} from '../../services/firebase/Calls';
 import GoogleIcon from '@mui/icons-material/Google';
 
 export default function GoogleLogin() {
@@ -12,7 +12,7 @@ export default function GoogleLogin() {
 
     return (
         <IconButton color="primary" onClick={handleLogin}>
-            <GoogleIcon />
+            <GoogleIcon/>
         </IconButton>
     );
 }
