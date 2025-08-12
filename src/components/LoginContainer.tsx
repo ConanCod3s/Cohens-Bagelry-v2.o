@@ -1,11 +1,12 @@
 import {useState} from "react";
-import {Button, Stack, Switch, Tooltip, Typography} from "@mui/material";
+import {Button, Divider, Grid, Stack, Switch, Tooltip, Typography} from "@mui/material";
 import LoginWithEmail from "../components/login/LoginWithEmailAndPassword";
 import SignUpWithEmail from "../components/signUp/SignUpWithEmail";
 import {useUser} from '../services/providers/User';
 import {signUserOut} from "../services/firebase/Calls";
 import {useNavigate} from "react-router-dom";
 import {useSnackbar} from "notistack";
+import GoogleLogin from "./login/LoginWithGoogle.tsx";
 
 export default function LoginContainer() {
     const {userInfo, loggedIn} = useUser();
@@ -49,10 +50,10 @@ export default function LoginContainer() {
                         <Typography variant="caption">Sign Up</Typography>
                     </Stack>
                     {loginSignup ? <SignUpWithEmail/> : <LoginWithEmail/>}
-                    {/* <Divider />
+                     <Divider />
                     <Grid container justifyContent='space-around'>
                         <GoogleLogin />
-                    </Grid> */}
+                    </Grid>
                 </>
             )}
         </Stack>
