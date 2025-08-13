@@ -1,5 +1,8 @@
 import "firebase/auth";
+import { getFunctions } from 'firebase/functions';
 import {app} from "./Config";
+
+import { httpsCallable } from "firebase/functions";
 import {getDownloadURL, getStorage, ref} from "firebase/storage";
 import {getAuth, sendEmailVerification, signOut} from "firebase/auth";
 import {
@@ -19,6 +22,7 @@ import {
 const auth = getAuth(app);
 const db = getFirestore(app);
 const storage = getStorage(app);
+const functions = getFunctions(app, "us-central1");
 
 export const AppImages: string[] = []
 
@@ -178,7 +182,26 @@ export const getCount = async (collectionName: string): Promise<number> => {
     }
 };
 
-export const getCollection = async (collectionName: string): Promise<any[]> => {
+export type OrderType = {
+    id: string;
+    orderId: string;
+    orderedByUid: string;
+    // ...other fields
+};
+
+// I messed this up, by putting all the time and effort into making sure there was more security around the order history, that
+// I forgot this is used other places.....so for now we have getCollection and getCollectionOld, lul
+export async function getCollection(opts?: { limit?: number; startAfterOrderId?: string , collection?: string}): Promise<any[]> {
+    const getCollectionCallable = httpsCallable<{ limit?: number; startAfterOrderId?: string }, { orders: OrderType[] }>(
+        functions,
+        "getCollection"
+    );
+
+    const res = await getCollectionCallable(opts ?? {});
+    return res.data.orders ?? [];
+}
+
+export const getCollectionOld = async (collectionName: string): Promise<any[]> => {
     try {
         const snapshot = await getDocs(collection(db, collectionName));
         return snapshot.docs.map((doc) => ({id: doc.id, ...doc.data()}));

@@ -6,10 +6,6 @@ import {callCheckIfAdmin} from '../../../services/firebase/httpsCallables/AdminC
 import {useUser} from '../../../services/providers/User.tsx';
 import OrderCard from "./OrderCard.tsx";
 
-const isValidOrder = (data: OrderType): data is OrderType => {
-    return data && true && Array.isArray(data.selections);
-};
-
 export default function OrderHistory() {
     const {userInfo, loggedIn} = useUser();
     const [orders, setOrders] = useState<OrderType[]>([]);
@@ -21,17 +17,13 @@ export default function OrderHistory() {
             if (loggedIn && userInfo) {
                 try {
                     setLoading(true);
-                    const adminStatus = await callCheckIfAdmin((userInfo.uid as string));
-                    setIsAdmin(adminStatus as boolean);
 
-                    const ordersData: OrderType[] = await getCollection('orders');
-                    const validOrders = ordersData.filter(isValidOrder);
+                    const adminStatus = await callCheckIfAdmin(userInfo.uid as string);
+                    setIsAdmin(Boolean(adminStatus));
 
-                    const filteredOrders = adminStatus
-                        ? validOrders
-                        : validOrders.filter(order => order.orderedByUid === userInfo.uid);
+                    const ordersData = await getCollection({ collection: 'orders' });
 
-                    const sortedOrders = filteredOrders.sort((a, b) => {
+                    const sortedOrders = ordersData.sort((a, b) => {
                         const orderIdA = a.orderId.substring(3);
                         const orderIdB = b.orderId.substring(3);
                         return orderIdA.localeCompare(orderIdB);
@@ -39,7 +31,7 @@ export default function OrderHistory() {
 
                     setOrders(sortedOrders);
                 } catch (error) {
-                    console.error('Failed to fetch data:', error);
+                    console.error("Failed to fetch data:", error);
                 } finally {
                     setLoading(false);
                 }

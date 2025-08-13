@@ -1,4 +1,5 @@
 import {initializeApp} from "firebase/app";
+
 // import { getAnalytics } from "firebase/analytics";
 
 // Ignore this until we need it so we can deploy

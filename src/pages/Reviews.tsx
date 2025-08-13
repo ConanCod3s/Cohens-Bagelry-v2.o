@@ -1,5 +1,5 @@
 import {useEffect, useState} from "react";
-import {getCollection} from "../services/firebase/Calls";
+import {getCollectionOld} from "../services/firebase/Calls";
 import {ReviewType} from "../utils/constants/Types";
 import {
     Alert,
@@ -25,8 +25,8 @@ export default function Reviews() {
     useEffect(() => {
         const fetchReviews = async () => {
             try {
-                const reviewsData = await getCollection("reviews");
-                const sortedReviews = reviewsData.sort((a, b) => b.createdAt.seconds - a.createdAt.seconds);
+                const reviewsData:ReviewType[] = await getCollectionOld("reviews");
+                const sortedReviews:ReviewType[] = reviewsData.sort((a, b) => b.createdAt.seconds - a.createdAt.seconds);
                 setReviews(sortedReviews);
                 setError(null);
             } catch (err) {
