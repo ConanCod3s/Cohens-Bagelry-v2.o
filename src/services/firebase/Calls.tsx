@@ -11,7 +11,8 @@ import {
     getFirestore,
     query,
     setDoc,
-    where
+    where,
+    deleteDoc
 } from "firebase/firestore";
 
 // Initialize Firebase services
@@ -19,40 +20,56 @@ const auth = getAuth(app);
 const db = getFirestore(app);
 const storage = getStorage(app);
 
-// Fetch application images from Firebase Storage
-export const getAppImages = async (): Promise<string[]> => {
-    const urls = [
-        "gs://cohens-bagelry-8c701.appspot.com/Step_1.jpg",
-        "gs://cohens-bagelry-8c701.appspot.com/Step_2.jpg",
-        "gs://cohens-bagelry-8c701.appspot.com/Step_3.jpg",
-        "gs://cohens-bagelry-8c701.appspot.com/Step_4.jpg",
-        "gs://cohens-bagelry-8c701.appspot.com/Step_5.1.jpg",
-        "gs://cohens-bagelry-8c701.appspot.com/Step_5.2.jpg",
-        "gs://cohens-bagelry-8c701.appspot.com/Step_6.jpg",
-        "gs://cohens-bagelry-8c701.appspot.com/Step_7.1.jpg",
-        "gs://cohens-bagelry-8c701.appspot.com/Step_7.2.jpg",
-        "gs://cohens-bagelry-8c701.appspot.com/Step_8.1.jpg",
-        "gs://cohens-bagelry-8c701.appspot.com/Step_8.2.jpg",
-    ];
+export const AppImages: string[] = []
+
+const urls = [
+    "gs://cohens-bagelry-8c701.appspot.com/Step_1.jpg",
+    "gs://cohens-bagelry-8c701.appspot.com/Step_2.jpg",
+    "gs://cohens-bagelry-8c701.appspot.com/Step_3.jpg",
+    "gs://cohens-bagelry-8c701.appspot.com/Step_4.jpg",
+    "gs://cohens-bagelry-8c701.appspot.com/Step_5.1.jpg",
+    "gs://cohens-bagelry-8c701.appspot.com/Step_5.2.jpg",
+    "gs://cohens-bagelry-8c701.appspot.com/Step_6.jpg",
+    "gs://cohens-bagelry-8c701.appspot.com/Step_7.1.jpg",
+    "gs://cohens-bagelry-8c701.appspot.com/Step_7.2.jpg",
+    "gs://cohens-bagelry-8c701.appspot.com/Step_8.1.jpg",
+    "gs://cohens-bagelry-8c701.appspot.com/Step_8.2.jpg",
+];
+
+let cache: string[] | null = null;
+let inFlight: Promise<string[]> | null = null;
+
+export async function getAppImages(): Promise<string[]> {
+    if (cache) return cache;
+    if (inFlight) return inFlight;
+
+    inFlight = Promise.all(urls.map((u) => getDownloadURL(ref(storage, u))))
+        .then((downloadUrls) => {
+            AppImages.splice(0, AppImages.length, ...downloadUrls);
+            cache = AppImages;
+            return cache;
+        })
+        .catch((err) => {
+            console.error("Error fetching application images:", err);
+            cache = null;
+            throw err;
+        })
+        .finally(() => {
+            inFlight = null;
+        });
+
+    return inFlight;
+}
+
+export const handleDelete = async (
+    {
+        id
+    }: {
+        id: string;
+    }): Promise<void> => {
 
     try {
-        const promises = urls.map((url) => getDownloadURL(ref(storage, url)));
-        return await Promise.all(promises);
-    } catch (error) {
-        console.error("Error fetching application images:", error);
-        return [];
-    }
-};
-
-export const handleDelete = async ({
-                                       orderId
-                                   }: {
-    orderId: string;
-}): Promise<void> => {
-    console.log('handleDelete', orderId);
-    try {
-        // await deleteDoc(doc(db, "orders", orderId));
-        console.log("Order deleted successfully");
+        await deleteDoc(doc(db, "orders", id));
     } catch (error) {
         console.error("Error deleting order: ", error);
     }
@@ -66,13 +83,14 @@ export const signUserOut = async (): Promise<void> => {
     }
 };
 
-export const checkDocumentExists = async ({
-                                              collectionName,
-                                              documentId,
-                                          }: {
-    collectionName: string;
-    documentId: string;
-}): Promise<boolean | null> => {
+export const checkDocumentExists = async (
+    {
+        collectionName,
+        documentId,
+    }: {
+        collectionName: string;
+        documentId: string;
+    }): Promise<boolean | null> => {
     try {
         const docRef = doc(db, collectionName, documentId);
         const docSnap = await getDoc(docRef);
@@ -85,15 +103,16 @@ export const checkDocumentExists = async ({
     }
 }
 
-export const getDocIdByField = async ({
-                                          collectionName,
-                                          fieldName,
-                                          value,
-                                      }: {
-    collectionName: string;
-    fieldName: string;
-    value: any;
-}): Promise<string | null> => {
+export const getDocIdByField = async (
+    {
+        collectionName,
+        fieldName,
+        value,
+    }: {
+        collectionName: string;
+        fieldName: string;
+        value: any;
+    }): Promise<string | null> => {
     try {
         const collectionRef = collection(db, collectionName);
         const q = query(collectionRef, where(fieldName, "==", value));
@@ -108,15 +127,16 @@ export const getDocIdByField = async ({
     }
 };
 
-export const setFireBaseDoc = async ({
-                                         collectionName,
-                                         docId,
-                                         props,
-                                     }: {
-    collectionName: string;
-    docId?: string;
-    props: any;
-}): Promise<void> => {
+export const setFireBaseDoc = async (
+    {
+        collectionName,
+        docId,
+        props,
+    }: {
+        collectionName: string;
+        docId?: string;
+        props: any;
+    }): Promise<void> => {
     try {
         if (!docId) {
             const newRef = doc(collection(db, collectionName));
@@ -130,13 +150,14 @@ export const setFireBaseDoc = async ({
     }
 };
 
-export const getDocumentById = async ({
-                                          collectionName,
-                                          docId,
-                                      }: {
-    collectionName: string;
-    docId: string;
-}): Promise<any> => {
+export const getDocumentById = async (
+    {
+        collectionName,
+        docId,
+    }: {
+        collectionName: string;
+        docId: string;
+    }): Promise<any> => {
     try {
         const docRef = doc(db, collectionName, docId);
         const docSnap = await getDoc(docRef);

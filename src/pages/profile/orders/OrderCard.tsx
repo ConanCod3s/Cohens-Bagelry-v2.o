@@ -41,8 +41,11 @@ const OrderCard: React.FC<{ order: OrderType; isAdmin: boolean }> = ({order, isA
                     <Typography variant="h6">{order.orderId}</Typography>
                 </Stack>
                 {isAdmin && (
-                    <KeyValueRow label="Name" value={`${order.lastName}, ${order.firstName}`}/>
+                    <KeyValueRow label="UID" value={`${order.id}`}/>
                 )}
+                <div style={{height:'25px',width: '100%'}}/>
+
+                <KeyValueRow label="Name" value={`${order.lastName}, ${order.firstName}`}/>
                 <KeyValueRow label="Date" value={order.day}/>
                 {order.selections.map((sel, index) => (
                     <KeyValueRow key={index} label={sel.value} value={sel.quantity}/>
@@ -64,7 +67,7 @@ const OrderCard: React.FC<{ order: OrderType; isAdmin: boolean }> = ({order, isA
                 <KeyValueRow label="Total" value={`$${order?.costData?.totalCost?.toFixed(2) || "0.00"}`}/>
                 {isAdmin && (
                     <Stack direction="row" justifyContent="center" paddingTop={2}>
-                        <DeleteOrder {...order} />
+                        <DeleteOrder {...order}  />
                     </Stack>
                 )}
             </CardContent>

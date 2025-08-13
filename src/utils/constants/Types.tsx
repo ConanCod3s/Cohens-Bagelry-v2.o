@@ -40,6 +40,7 @@ type AvailableType = {
 };
 
 type OrderType = {
+    id:string;
     costData: {
         cost: number;
         fee: number;
